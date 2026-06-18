@@ -1,7 +1,17 @@
-# TODO - Lumina ecommerce
+# TODO - Correção do modal de checkout
 
-- [x] Corrigir `index.html`: remover HTML duplicado, retirar promessa de IA e preparar busca comum.
-- [x] Atualizar produtos: usar imagens existentes e adicionar dados para filtro/carrinho.
-- [x] Atualizar `css/style.css`: adicionar busca, dots do slider, favoritos ativos, carrinho lateral e estados responsivos.
-- [x] Atualizar `js/script.js`: adicionar filtro, busca, favoritos, carrinho com localStorage, newsletter e checkout simulado.
-- [ ] Validacao manual no navegador: abrir `index.html`, checar slider, busca, filtros, carrinho, favoritos e responsividade.
+- [x] Entender causa: botão `#openCheckoutBtn` não abre `#checkoutModal` (JS não tem handler).
+- [x] Atualizar `js/script.js`:
+  - [x] Capturar `openCheckoutBtn`, `checkoutModal`, `checkoutModalClose`.
+  - [x] Implementar `toggleCheckoutModal(open)`.
+  - [x] Ligar clique do botão `#openCheckoutBtn` para abrir o modal.
+  - [x] Ligar fechamento via botão `checkout-modal-close` e via `Escape`.
+  - [x] Fechar/compatibilizar o drawer do carrinho ao abrir o modal.
+- [x] Atualizar `css/style.css`:
+  - [x] Criar estilos para `#checkoutModal` no estado aberto (mostrar/ocultar).
+- [ ] Testar manualmente:
+  - [ ] Abrir carrinho e clicar “Finalizar Pedido” abre o modal.
+  - [ ] Fechar modal volta ao carrinho.
+  - [ ] Submeter checkout abre o WhatsApp.
+
+
