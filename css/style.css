@@ -15,6 +15,11 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 /* ==========================================================================
    NAVBAR SUPERIOR (GLASSMORPHISM STYLE)
    ========================================================================== */
@@ -160,6 +165,37 @@ body {
     font-size: 11px;
     font-weight: 700;
     line-height: 1;
+    transform-origin: center;
+}
+
+.cart-count.cart-count-bump {
+    animation: cartCountBump 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cartCountBump {
+    0% {
+        transform: translateX(0) scale(1);
+    }
+
+    18% {
+        transform: translateX(-4px) scale(1.12);
+    }
+
+    34% {
+        transform: translateX(4px) scale(1.12);
+    }
+
+    50% {
+        transform: translateX(-3px) scale(1.08);
+    }
+
+    66% {
+        transform: translateX(3px) scale(1.05);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+    }
 }
 
 .search-close-btn {
@@ -177,7 +213,7 @@ body {
    ========================================================================== */
 .hero-slider {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     background-color: #000000;
@@ -347,7 +383,7 @@ body {
     box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.18);
 }
 
-/* Toast de confirmação (Add to Bag) */
+/* Toast de confirmação ao adicionar produto */
 .hero-toast {
     position: absolute;
     left: 50%;
@@ -601,7 +637,7 @@ body {
     /* Fundo branco limpo contrastando com o hero */
     color: #0b0c10;
     padding: 80px 0;
-    width: 100vw;
+    width: 100%;
     scroll-margin-top: 86px;
 }
 
@@ -842,7 +878,7 @@ body {
 /* Grid de Produtos */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 32px;
 }
 
@@ -851,6 +887,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: transparent;
+    cursor: pointer;
 }
 
 .product-card[hidden] {
@@ -948,7 +985,7 @@ body {
     fill: #ef4444;
 }
 
-/* Botão Add to Bag (Efeito de Subida Suave) */
+/* Botão de adicionar ao carrinho (Efeito de Subida Suave) */
 .add-to-bag-btn {
     position: absolute;
     bottom: 20px;
@@ -961,7 +998,7 @@ body {
     border: none;
     padding: 14px 0;
     border-radius: 30px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     z-index: 5;
@@ -969,11 +1006,21 @@ body {
     /* Transição cirúrgica para subir macio */
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .add-to-bag-btn:hover {
     background-color: #f8fafc;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.add-to-bag-btn.added,
+.add-to-bag-btn:disabled {
+    background-color: #16a34a;
+    color: #ffffff;
+    cursor: default;
 }
 
 .product-card:focus-within .add-to-bag-btn {
@@ -1064,7 +1111,7 @@ body {
     /* Texto cinza suave */
     padding: 80px 0 0 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    width: 100vw;
+    width: 100%;
 }
 
 /* Estrutura do Grid Principal */
@@ -1246,6 +1293,7 @@ body {
     z-index: 300;
     width: min(420px, 100vw);
     height: 100vh;
+    height: 100dvh;
     background-color: #ffffff;
     color: #0f172a;
     transform: translateX(100%);
@@ -1506,7 +1554,7 @@ body {
     position: fixed;
     inset: 0;
     z-index: 260;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 24px;
@@ -1517,13 +1565,15 @@ body {
 }
 
 .checkout-modal.open {
+    display: flex;
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 .checkout-modal-panel {
     width: min(720px, 100%);
     max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
     overflow: auto;
     background-color: #ffffff;
     color: #0f172a;
@@ -1539,6 +1589,7 @@ body {
 }
 
 .checkout-modal[aria-hidden="true"] {
+    display: none;
     opacity: 0;
 }
 
@@ -1805,6 +1856,7 @@ body.no-scroll {
 
     .hero-slider {
         height: 100svh;
+        height: 100dvh;
         min-height: 620px;
     }
 
@@ -1943,6 +1995,7 @@ body.no-scroll {
         width: calc(100% - 28px);
         transform: translate(-50%, 0);
         padding: 13px 0;
+        font-size: 13px;
     }
 
     .favorite-btn {
@@ -1972,8 +2025,8 @@ body.no-scroll {
     }
 
     .cart-drawer {
-        width: 100vw;
-        max-width: 100vw;
+        width: 100%;
+        max-width: 100%;
     }
 
     .cart-drawer-header {
@@ -2023,6 +2076,7 @@ body.no-scroll {
 
     .checkout-modal-panel {
         max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
         border-radius: 14px;
     }
 
@@ -2101,6 +2155,10 @@ body.no-scroll {
         font-size: 13px;
     }
 
+    .hero-buttons {
+        gap: 10px;
+    }
+
     .collection-title {
         font-size: 30px;
     }
@@ -2108,6 +2166,11 @@ body.no-scroll {
     .product-meta {
         flex-direction: column;
         gap: 4px;
+    }
+
+    .add-to-bag-btn {
+        font-size: 12px;
+        padding: 12px 10px;
     }
 
     .product-price {
@@ -2121,5 +2184,78 @@ body.no-scroll {
     .cart-item img {
         width: 64px;
         height: 78px;
+    }
+}
+
+@media (max-width: 360px) {
+    .nav-container {
+        padding: 0 10px;
+        gap: 8px;
+    }
+
+    .brand-logo {
+        max-width: 92px;
+        font-size: 19px;
+    }
+
+    .search-toggle-btn,
+    .cart-btn {
+        min-width: 38px;
+        min-height: 38px;
+    }
+
+    .hero-slider {
+        min-height: 560px;
+    }
+
+    .hero-content {
+        padding: 0 14px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .description {
+        font-size: 12px;
+    }
+
+    .container {
+        padding: 0 14px;
+    }
+
+    .collection-search-inner {
+        padding: 10px;
+    }
+
+    .category-btn {
+        padding: 9px 13px;
+        font-size: 12px;
+    }
+
+    .product-image-container {
+        aspect-ratio: 1 / 1.12;
+    }
+
+    .add-to-bag-btn {
+        width: calc(100% - 20px);
+        font-size: 11px;
+    }
+
+    .cart-drawer-header,
+    .cart-items,
+    .cart-summary {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .checkout-modal {
+        padding: 10px;
+    }
+
+    .checkout-modal-header,
+    .checkout-modal-panel .checkout-form {
+        padding-left: 14px;
+        padding-right: 14px;
     }
 }

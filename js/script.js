@@ -18,6 +18,7 @@ const sortProducts = document.getElementById('sortProducts');
 const priceRange = document.getElementById('priceRange');
 const priceRangeValue = document.getElementById('priceRangeValue');
 const favoritesOnly = document.getElementById('favoritesOnly');
+const categoriesContainer = document.querySelector('.categories-container');
 
 const cartBtn = document.querySelector('.cart-btn');
 const cartCount = document.querySelector('.cart-count');
@@ -55,6 +56,8 @@ let carrinhoAberto = false;
 let checkoutAberto = false;
 let carrinho = loadFromStorage('lumina-cart', []);
 let favoritos = loadFromStorage('lumina-favorites', []);
+const buttonResetTimers = new WeakMap();
+let ultimoTotalCarrinho = carrinho.reduce((total, item) => total + item.quantity, 0);
 const freteGratisMeta = 600;
 const whatsappPedidoNumero = '244952685457';
 
@@ -151,6 +154,10 @@ function getProductData(card) {
     };
 }
 
+function normalizeCategory(category) {
+    return String(category || 'All').trim().toLowerCase();
+}
+
 function ordenarProdutos() {
     const grid = document.querySelector('.products-grid');
     if (!grid) return;
@@ -175,9 +182,11 @@ function ordenarProdutos() {
 }
 
 function setActiveCategory(category) {
-    categoriaAtual = category;
+    categoriaAtual = String(category || 'All').trim();
+    const activeCategory = normalizeCategory(categoriaAtual);
+
     categoryButtons.forEach(button => {
-        button.classList.toggle('active', button.dataset.category === category);
+        button.classList.toggle('active', normalizeCategory(button.dataset.category) === activeCategory);
     });
     filtrarProdutos();
 }
@@ -190,7 +199,8 @@ function filtrarProdutos() {
         const name = card.dataset.name.toLowerCase();
         const category = card.dataset.category.toLowerCase();
         const price = Number(card.dataset.price);
-        const matchesCategory = categoriaAtual === 'All' || card.dataset.category === categoriaAtual;
+        const matchesCategory = normalizeCategory(categoriaAtual) === 'all'
+            || normalizeCategory(card.dataset.category) === normalizeCategory(categoriaAtual);
         const matchesSearch = !termo || name.includes(termo) || category.includes(termo);
         const matchesPrice = price <= precoMaximo;
         const matchesFavorite = !mostrarApenasFavoritos || favoritos.includes(card.dataset.id);
@@ -270,7 +280,31 @@ function adicionarAoCarrinho(card) {
 
     saveToStorage('lumina-cart', carrinho);
     renderCarrinho();
+
+    checkoutAberto = false;
+    checkoutModal?.classList.remove('open');
+    checkoutModal?.setAttribute('aria-hidden', 'true');
+
     showToast(`${product.name} adicionado ao carrinho.`);
+}
+
+function mostrarProdutoAdicionado(card) {
+    const button = card.querySelector('.add-to-bag-btn');
+    if (!button) return;
+
+    clearTimeout(buttonResetTimers.get(button));
+    button.textContent = 'Adicionado...';
+    button.classList.add('added');
+    button.disabled = true;
+
+    const timer = setTimeout(() => {
+        button.textContent = 'Adicionar ao carrinho';
+        button.classList.remove('added');
+        button.disabled = false;
+        buttonResetTimers.delete(button);
+    }, 1300);
+
+    buttonResetTimers.set(button, timer);
 }
 
 function alterarQuantidade(productId, delta) {
@@ -292,7 +326,15 @@ function renderCarrinho() {
     const shippingProgress = Math.min((subtotal / freteGratisMeta) * 100, 100);
     const faltanteFrete = Math.max(freteGratisMeta - subtotal, 0);
 
-    if (cartCount) cartCount.textContent = String(totalItems);
+    if (cartCount) {
+        cartCount.textContent = String(totalItems);
+        if (totalItems !== ultimoTotalCarrinho) {
+            cartCount.classList.remove('cart-count-bump');
+            void cartCount.offsetWidth;
+            cartCount.classList.add('cart-count-bump');
+            ultimoTotalCarrinho = totalItems;
+        }
+    }
     if (cartSubtotalEl) cartSubtotalEl.textContent = currencyFormatter.format(subtotal);
     if (cartEmptyEl) cartEmptyEl.hidden = carrinho.length > 0;
     if (openCheckoutBtn) openCheckoutBtn.disabled = carrinho.length === 0;
@@ -480,14 +522,24 @@ window.addEventListener('scroll', () => {
     navbar?.classList.toggle('navbar-scrolled', window.scrollY > 50);
 });
 
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => setActiveCategory(button.dataset.category));
+categoriesContainer?.addEventListener('click', event => {
+    const button = event.target.closest('.category-btn');
+    if (!button) return;
+
+    event.preventDefault();
+    setActiveCategory(button.dataset.category);
 });
 
 categoryLinks.forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', event => {
+        event.preventDefault();
         const category = link.dataset.categoryLink;
         setActiveCategory(category);
+
+        collectionSection?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     });
 });
 
@@ -514,13 +566,31 @@ favoritesOnly?.addEventListener('change', event => {
 });
 
 productCards.forEach(card => {
-    card.querySelector('.add-to-bag-btn')?.addEventListener('click', () => adicionarAoCarrinho(card));
-    card.querySelector('.favorite-btn')?.addEventListener('click', () => toggleFavorite(card));
+    const addButton = card.querySelector('.add-to-bag-btn');
+    const favoriteButton = card.querySelector('.favorite-btn');
+
+    card.addEventListener('click', event => {
+        if (event.target.closest('button, a, input, select, textarea, label')) return;
+        adicionarAoCarrinho(card);
+        mostrarProdutoAdicionado(card);
+    });
+
+    addButton?.addEventListener('click', event => {
+        event.stopPropagation();
+        adicionarAoCarrinho(card);
+        mostrarProdutoAdicionado(card);
+    });
+
+    favoriteButton?.addEventListener('click', event => {
+        event.stopPropagation();
+        toggleFavorite(card);
+    });
 });
 
 cartBtn?.addEventListener('click', () => toggleCart(true));
 cartCloseBtn?.addEventListener('click', () => toggleCart(false));
-openCheckoutBtn?.addEventListener('click', () => {
+openCheckoutBtn?.addEventListener('click', event => {
+    event.stopPropagation();
     if (!carrinho.length) return;
     toggleCheckoutModal(true);
 });
