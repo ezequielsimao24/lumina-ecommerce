@@ -155,8 +155,37 @@ function getProductData(card) {
 }
 
 function normalizeCategory(category) {
-    return String(category || 'All').trim().toLowerCase();
+    const c = String(category || 'All').trim();
+    // Mapeia categorias em PT para IDs internos (ingles/sem acento) usados no HTML dos produtos
+    const map = {
+        'todos': 'all',
+        'eletrónica': 'electronics',
+        'eletronica': 'electronics',
+        'moda': 'fashion',
+        'mobiliário': 'furniture',
+        'mobiliario': 'furniture',
+        'cozinha': 'kitchen',
+        'desporto': 'sports',
+        'belez a': 'beauty',
+        'beleza': 'beauty',
+        'infantil': 'kids',
+        'livros': 'books',
+        'automóveis': 'automotive',
+        'automoveis': 'automotive',
+        'decoração casa': 'homedecor',
+        'decoracao casa': 'homedecor',
+        'decoraçao casa': 'homedecor',
+        'roupa de cama': 'bedding',
+        'banho': 'bath',
+        'pets': 'pets',
+        'escritório': 'office',
+        'escritorio': 'office'
+    };
+
+    const lower = c.toLowerCase();
+    return map[lower] || lower;
 }
+
 
 function ordenarProdutos() {
     const grid = document.querySelector('.products-grid');
@@ -645,7 +674,163 @@ document.addEventListener('keydown', event => {
     toggleCollectionSearch(false);
 });
 
+/* ==========================================================================
+   AUTH (Login / Cadastro)
+   - Página isolada: login.html
+   - Este arquivo prepara seletores e event listeners para integrar com API (ex: Supabase)
+   ========================================================================== */
+
+// Funcoes auxiliares (placeholder para integracao futura)
+function setAuthError(el, message) {
+    if (!el) return;
+    el.textContent = message || '';
+}
+
+function getToggleBtnLabel(btn, isShowing) {
+    // Pequena regra para manter UX clara
+    return isShowing ? 'Ocultar' : 'Mostrar';
+}
+
+function handlePasswordVisibilityToggle(buttonEl) {
+    const inputId = buttonEl?.dataset?.togglePassword;
+    if (!inputId) return;
+
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl) return;
+
+    const isPassword = inputEl.type === 'password';
+    inputEl.type = isPassword ? 'text' : 'password';
+
+    const nextLabel = getToggleBtnLabel(buttonEl, !isPassword);
+    buttonEl.textContent = nextLabel;
+}
+
+function initAuthEventListeners() {
+    // Login
+    const loginForm = document.getElementById('loginForm');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginError = document.getElementById('loginError');
+
+    // Cadastro
+    const registerForm = document.getElementById('registerForm');
+    const registerName = document.getElementById('registerName');
+    const registerEmail = document.getElementById('registerEmail');
+    const registerPassword = document.getElementById('registerPassword');
+    const registerConfirmPassword = document.getElementById('registerConfirmPassword');
+    const registerError = document.getElementById('registerError');
+
+    // Alternancia de telas
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+    const goToRegisterBtn = document.getElementById('goToRegisterBtn');
+    const goToLoginBtn = document.getElementById('goToLoginBtn');
+
+    // Links/ UI
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+    // Alternar paines sem recarregar
+    function showPanel(panel) {
+        const isLogin = panel === loginPanel;
+        if (loginPanel) loginPanel.classList.toggle('active', isLogin);
+        if (registerPanel) registerPanel.classList.toggle('active', !isLogin);
+
+        // limpa erros ao alternar
+        setAuthError(loginError, '');
+        setAuthError(registerError, '');
+
+        // foco para acessibilidade
+        if (isLogin) {
+            loginEmail?.focus();
+        } else {
+            registerName?.focus();
+        }
+    }
+
+    goToRegisterBtn?.addEventListener('click', event => {
+        event.preventDefault();
+        showPanel(registerPanel);
+    });
+
+    goToLoginBtn?.addEventListener('click', event => {
+        event.preventDefault();
+        showPanel(loginPanel);
+    });
+
+    // Alternar visibilidade de senha
+    document.querySelectorAll('[data-toggle-password]').forEach(btn => {
+        btn.addEventListener('click', () => handlePasswordVisibilityToggle(btn));
+    });
+
+    // Esqueci a senha (placeholder)
+    forgotPasswordLink?.addEventListener('click', event => {
+        event.preventDefault();
+        // Futuro: chamar supabase.auth.resetPasswordForEmail(...)
+        setAuthError(loginError, 'Funcao de reset de senha sera conectada a API no futuro.');
+    });
+
+    // LOGIN submit (placeholder)
+    loginForm?.addEventListener('submit', async event => {
+        event.preventDefault();
+        setAuthError(loginError, '');
+
+        const email = String(loginEmail?.value || '').trim();
+        const password = String(loginPassword?.value || '');
+
+        // Validações basicas
+        if (!email || !password) {
+            setAuthError(loginError, 'Preencha e-mail e senha.');
+            return;
+        }
+
+        // Futuro: integrar com Supabase
+        // Exemplo (futuro):
+        // const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        // if (error) throw error;
+        // showToast('Login realizado com sucesso.');
+
+        // Placeholder de comportamento (sem API)
+        setAuthError(loginError, 'Conexao com API ainda nao configurada.');
+    });
+
+    // REGISTER submit (placeholder)
+    registerForm?.addEventListener('submit', async event => {
+        event.preventDefault();
+        setAuthError(registerError, '');
+
+        const fullName = String(registerName?.value || '').trim();
+        const email = String(registerEmail?.value || '').trim();
+        const password = String(registerPassword?.value || '');
+        const confirmPassword = String(registerConfirmPassword?.value || '');
+
+        if (!fullName || !email || !password || !confirmPassword) {
+            setAuthError(registerError, 'Preencha todos os campos.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setAuthError(registerError, 'As senhas nao coincidem.');
+            return;
+        }
+
+        // Futuro: integrar com Supabase
+        // Exemplo (futuro):
+        // const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { fullName }}});
+        // if (error) throw error;
+        // showToast('Conta criada. Verifique seu e-mail.');
+
+        // Placeholder
+        setAuthError(registerError, 'Conexao com API ainda nao configurada.');
+    });
+}
+
+// Inicializa apenas quando a pagina tiver elementos de auth
+if (document.getElementById('loginForm') || document.getElementById('registerForm')) {
+    initAuthEventListeners();
+}
+
 atualizarFavoritos();
 atualizarPrecoMaximo();
 renderCarrinho();
 filtrarProdutos();
+
