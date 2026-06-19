@@ -1,4 +1,4 @@
-/**
+   /**
  * Lumina Admin Panel
  * Dashboard com 4 abas dinamicas controlando a Home via localStorage.
  */
@@ -149,52 +149,267 @@
         if (window.innerWidth < 1024) toggleSidebar(false);
     }
 
+    // ─── Premium UI (Fade + CountUp + Categoria Bars) ─────────────────
+
+    function applyPremiumFadeUp() {
+        const root = document.getElementById('dashboardFadeRoot');
+        if (!root) return;
+
+        root.classList.add('opacity-0');
+        requestAnimationFrame(() => {
+            root.style.transition = 'opacity 420ms ease, transform 520ms cubic-bezier(0.25, 1, 0.5, 1)';
+            root.style.transform = 'translateY(10px)';
+            root.classList.remove('opacity-0');
+            root.style.opacity = '1';
+            root.style.transform = 'translateY(0)';
+        });
+
+        // Make sure cards animate in a pleasant cascade
+        const candidates = root.querySelectorAll('[data-premium-anim]');
+        candidates.forEach((node, idx) => {
+            node.style.opacity = '0';
+            node.style.transform = 'translateY(10px)';
+            node.style.transition = 'opacity 520ms ease, transform 520ms cubic-bezier(0.25, 1, 0.5, 1)';
+            node.style.transitionDelay = `${idx * 60}ms`;
+            requestAnimationFrame(() => {
+                node.style.opacity = '1';
+                node.style.transform = 'translateY(0)';
+            });
+        });
+    }
+
+    function countUp(el, target, duration = 900) {
+        if (!el) return;
+        const start = 1;
+        const end = Math.max(0, Number(target) || 0);
+        if (end === 0) {
+            el.textContent = '0';
+            return;
+        }
+
+        const diff = end - start;
+        const startTs = performance.now();
+
+        function tick(now) {
+            const t = Math.min(1, (now - startTs) / duration);
+            const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+            const value = start + Math.round(diff * eased);
+            el.textContent = String(value);
+            if (t < 1) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+    }
+
+    function renderCategoryBarsSkeleton() {
+        // Containers com skeleton (já visíveis, depois preenchidas)
+        return `
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex items-center justify-between">
+                <div class="h-3 w-40 animate-pulse rounded bg-slate-200"></div>
+                <div class="h-3 w-16 animate-pulse rounded bg-slate-200"></div>
+              </div>
+              <div class="mt-3 h-2 w-full animate-pulse rounded bg-slate-200"></div>
+            </div>
+        `;
+    }
+
+    function getCategoryCounts(products) {
+        const counts = {};
+        (products || []).forEach(p => {
+            const key = p.category || 'Sem categoria';
+            counts[key] = (counts[key] || 0) + 1;
+        });
+        return counts;
+    }
+
+    function renderCategoryBars(products) {
+        const container = document.getElementById('categoryDistribution');
+        if (!container) return;
+
+        const counts = getCategoryCounts(products);
+        const entries = Object.entries(counts);
+        const max = entries.reduce((m, [, v]) => Math.max(m, v), 0);
+
+        if (!entries.length) {
+            container.innerHTML = `
+              <div class="text-sm text-slate-500">Sem dados de categorias ainda.</div>
+            `;
+            return;
+        }
+
+        container.innerHTML = entries
+            .sort((a, b) => b[1] - a[1])
+            .map(([category, qty], idx) => {
+                const pct = max ? (qty / max) * 100 : 0;
+                const label = CATEGORY_LABELS[category] || category;
+                return `
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4" data-premium-anim>
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-slate-800 truncate">${escapeHtml(label)}</p>
+                                <p class="text-xs text-slate-500">${qty} produtos</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-slate-900" data-count="category-${idx}" data-final="${qty}">1</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                            <div class="h-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-500"
+                                 data-bar="${idx}" style="width:0%"></div>
+                        </div>
+                    </div>
+                `;
+            })
+            .join('');
+
+        // animate bars immediately (visual)
+        entries
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([, qty], idx) => {
+                const bar = container.querySelector(`[data-bar="${idx}"]`);
+                const pct = max ? (qty / max) * 100 : 0;
+                if (bar) {
+                    requestAnimationFrame(() => {
+                        bar.style.transition = 'width 900ms cubic-bezier(0.25, 1, 0.5, 1)';
+                        bar.style.width = `${pct}%`;
+                    });
+                }
+            });
+    }
+
+    function animateDashboardNumbers({
+        total,
+        disponiveis,
+        indisponiveis,
+        whatsappClicks,
+        newsletterLeads,
+        categoryCounts
+    }) {
+        const root = document.getElementById('dashboardFadeRoot');
+        if (!root) return;
+
+        // Map metric cards by their subtitles (robust-ish)
+        const totalCard = root.querySelector('.metric-total-products p.mt-2');
+        const availCard = root.querySelector('.metric-available-products p.mt-2');
+        const unavailCard = root.querySelector('.metric-unavailable-products p.mt-2');
+        const whatsappCard = root.querySelector('.metric-whatsapp-clicks p.mt-2');
+        const leadsCard = root.querySelector('.metric-newsletter-leads p.mt-2');
+
+        countUp(totalCard, total, 980);
+        countUp(availCard, disponiveis, 860);
+        countUp(unavailCard, indisponiveis, 860);
+        countUp(whatsappCard, whatsappClicks || 0, 720);
+        countUp(leadsCard, newsletterLeads || 0, 760);
+
+        // Category counts
+        const countEls = root.querySelectorAll('[data-count][data-final]');
+        countEls.forEach(el => {
+            const final = Number(el.getAttribute('data-final') || '0');
+            countUp(el, final, 780);
+        });
+    }
+
     // ─── Dashboard ───────────────────────────────────────────────
+
 
     function renderDashboard() {
         const panel = els.panels.dashboard;
         const products = getProducts();
         const analytics = window.LuminaStore?.getAnalytics() || { whatsappClicks: 0, recentActivity: [] };
         const leads = window.LuminaStore?.getNewsletterLeads() || [];
-        const available = products.filter(product => !product.indisponivel).length;
+
+        const total = products.length;
+        const indisponiveis = products.filter(product => product.indisponivel).length;
+        const disponiveis = total - indisponiveis;
+
+        const recent = analytics.recentActivity || [];
 
         panel.innerHTML = `
-            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                ${metricCard('fa-box', 'Total de Produtos', products.length, `${available} disponiveis na vitrine`, 'bg-sky-500')}
-                ${metricCard('fa-brands fa-whatsapp', 'Cliques WhatsApp', analytics.whatsappClicks || 0, 'Conversoes registradas', 'bg-emerald-500')}
-                ${metricCard('fa-envelope', 'Leads Newsletter', leads.length, 'E-mails capturados na Home', 'bg-violet-500')}
-            </div>
-
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                    <h2 class="text-base font-bold text-slate-900">Atividade Recente</h2>
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ultimos eventos</span>
+            <div id="dashboardFadeRoot" class="space-y-6">
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    ${metricCard('fa-box', 'Total de Produtos', total, `${disponiveis} disponiveis • ${indisponiveis} indisponiveis`, 'bg-sky-500', 'metric-total-products')}
+                    ${metricCard('fa-square-check', 'Produtos Disponíveis', disponiveis, 'Na vitrine / prontos para venda', 'bg-emerald-500', 'metric-available-products')}
+                    ${metricCard('fa-square-xmark', 'Produtos Indisponíveis', indisponiveis, 'Ocultos da vitrine', 'bg-rose-500', 'metric-unavailable-products')}
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
-                            <tr>
-                                <th class="px-5 py-3 font-semibold">Tipo</th>
-                                <th class="px-5 py-3 font-semibold">Descricao</th>
-                                <th class="px-5 py-3 font-semibold">Data</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            ${(analytics.recentActivity || []).slice(0, 8).map(item => `
-                                <tr class="hover:bg-slate-50/80">
-                                    <td class="px-5 py-3">
-                                        <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold uppercase text-slate-600">${escapeHtml(item.type)}</span>
-                                    </td>
-                                    <td class="px-5 py-3 text-slate-700">${escapeHtml(item.label)}</td>
-                                    <td class="px-5 py-3 text-slate-500">${formatDate(item.date)}</td>
-                                </tr>
-                            `).join('') || emptyRow(3, 'Sem atividade registada.')}
-                        </tbody>
-                    </table>
+
+                <div class="grid gap-4 lg:grid-cols-3">
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-1">
+                        <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+                            <h2 class="text-base font-bold text-slate-900">Distribuição por Categoria</h2>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Baseado em stock</span>
+                        </div>
+
+                        <div id="categoryDistribution" class="p-4 space-y-4">
+                            ${renderCategoryBarsSkeleton()}
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2">
+                        <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+                            <h2 class="text-base font-bold text-slate-900">Atividade Recente</h2>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Ultimos eventos</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                                    <tr>
+                                        <th class="px-5 py-3 font-semibold">Tipo</th>
+                                        <th class="px-5 py-3 font-semibold">Descricao</th>
+                                        <th class="px-5 py-3 font-semibold">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    ${recent.slice(0, 8).map(item => `
+                                        <tr class="hover:bg-slate-50/80">
+                                            <td class="px-5 py-3">
+                                                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold uppercase text-slate-600">${escapeHtml(item.type)}</span>
+                                            </td>
+                                            <td class="px-5 py-3 text-slate-700">${escapeHtml(item.label)}</td>
+                                            <td class="px-5 py-3 text-slate-500">${formatDate(item.date)}</td>
+                                        </tr>
+                                    `).join('') || emptyRow(3, 'Sem atividade registada.')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    ${metricCard('fa-brands fa-whatsapp', 'Cliques WhatsApp', analytics.whatsappClicks || 0, 'Conversoes registradas', 'bg-emerald-500', 'metric-whatsapp-clicks')}
+                    ${metricCard('fa-envelope', 'Leads Newsletter', leads.length, 'E-mails capturados na Home', 'bg-violet-500', 'metric-newsletter-leads')}
+                    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Pronto para Supabase</p>
+                                <p class="mt-2 text-3xl font-extrabold text-slate-900">Fase C</p>
+                                <p class="mt-1 text-sm text-slate-500">Auth user profile na sidebar</p>
+                            </div>
+                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl text-white bg-sky-500">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
+
+        renderCategoryBars(products);
+
+        // premium entrance
+        applyPremiumFadeUp();
+
+        // CountUp (dashboard numbers)
+        animateDashboardNumbers({
+            total,
+            disponiveis,
+            indisponiveis,
+            whatsappClicks: analytics.whatsappClicks || 0,
+            newsletterLeads: leads.length,
+            categoryCounts: getCategoryCounts(products)
+        });
     }
+
 
     function metricCard(icon, title, value, subtitle, colorClass) {
         return `
@@ -310,7 +525,18 @@
     }
 
     function openProductModal(productId = null) {
+        // reset preview/UI state
+        const previewWrap = document.getElementById('product-image-preview');
+        const previewImg = document.getElementById('product-image-preview-img');
+        const fileInput = document.getElementById('product-image');
+        const hiddenImageField = document.getElementById('productImage');
+        if (previewWrap) previewWrap.classList.add('hidden');
+        if (previewImg) previewImg.src = '';
+        if (fileInput) fileInput.value = '';
+        if (hiddenImageField) hiddenImageField.value = '';
+
         state.editingProductId = productId;
+
         const product = productId ? window.LuminaCatalog?.getProductById(productId) : null;
 
         els.productModalTitle.textContent = product ? 'Editar Produto' : 'Novo Produto';
@@ -582,7 +808,57 @@
 
     // ─── Init ────────────────────────────────────────────────────
 
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function bindImageUpload() {
+        const fileInput = document.getElementById('product-image');
+        const previewWrap = document.getElementById('product-image-preview');
+        const previewImg = document.getElementById('product-image-preview-img');
+        const clearBtn = document.getElementById('clearProductImageBtn');
+        const hiddenImageField = document.getElementById('productImage');
+        if (!fileInput) return;
+
+        fileInput.addEventListener('change', async () => {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+
+            try {
+                const dataUrl = await readFileAsDataURL(file);
+                if (hiddenImageField) hiddenImageField.value = dataUrl;
+
+                if (previewWrap) previewWrap.classList.remove('hidden');
+                if (previewImg) {
+                    previewImg.src = dataUrl;
+                    // gentle transition on show
+                    previewImg.style.transition = 'transform 420ms cubic-bezier(0.25, 1, 0.5, 1)';
+                    previewImg.style.transform = 'scale(0.98)';
+                    requestAnimationFrame(() => {
+                        previewImg.style.transform = 'scale(1)';
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                showToast('Falha ao ler a imagem. Tente novamente.');
+            }
+        });
+
+        clearBtn?.addEventListener('click', () => {
+            if (fileInput) fileInput.value = '';
+            if (hiddenImageField) hiddenImageField.value = '';
+            previewWrap?.classList.add('hidden');
+            if (previewImg) previewImg.src = '';
+        });
+    }
+
     function bindEvents() {
+
         els.navButtons.forEach(button => {
             button.addEventListener('click', () => switchTab(button.dataset.tab));
         });

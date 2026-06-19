@@ -1,15 +1,11 @@
-# TODO - Refactor Lumina (Moda & Vestuário)
+# TODO — Lumina Admin Premium
 
-- [x] Atualizar `index.html`:
-  - [x] Reestruturar HERO com texto e botões voltados a Moda premium.
-  - [x] Substituir container de categorias para apenas: Todos, Masculino, Feminino, Calcados, Acessorios.
-  - [x] Remover produtos das categorias não relacionadas (Electronics, Furniture, Kitchen etc.).
-  - [x] Atualizar `data-category` e texto `.product-category` dos cards restantes apenas para: Todos/Masculino/Feminino/Calcados/Acessorios.
-- [x] Atualizar `js/script.js`:
-  - [x] Ajustar lógica de filtro para comparar `data-category` com as novas categorias em PT.
-  - [x] Garantir que “Todos” exibe todos os produtos.
-- [ ] Verificar no browser:
-  - [ ] Filtro por cada categoria funciona.
-  - [ ] Search funciona com categorias em PT.
-  - [ ] Favoritos e Carrinho continuam funcionando.
+- [ ] admin.html: Atualizar formulário do produto para upload real de imagem (File input) + container de preview elegante
+- [ ] admin.html: Inserir User Profile Card no fim da sidebar (com id admin-email e comentário de integração supabase na Fase C)
+- [ ] js/admin.js: Implementar FileReader -> Base64 e persistir imagem no produto (contrato mantém `image` como string)
+- [ ] js/admin.js: Dashboard Premium (cards: disponíveis/indisponíveis + distribuição por categoria com barras proporcionais)
+- [ ] js/admin.js: CountUp em JS puro para todos os números/métricas do dashboard
+- [ ] js/admin.js: Fade-In/Slide-Up ao carregar página (admin)
+- [ ] js/admin.js: Responsividade (ajustes de layout/containers para mobile)
+- [ ] Validação manual: salvar produto, preview, render no catalog e contadores ao abrir dashboard
 
