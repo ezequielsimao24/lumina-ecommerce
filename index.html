@@ -151,295 +151,33 @@
 
       <p class="results-status" id="resultsStatus" aria-live="polite"></p>
 
-      <div class="products-grid">
-        <article class="product-card fade-up-element visible" data-id="zenith" data-category="Masculino"
-          data-name="Zenith Social Set" data-price="129900" data-stock="12">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Zenith Social Set" class="product-image">
-            <span class="product-badge">Premium</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Zenith Social Set">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Masculino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Zenith Social Set</h3>
-              <span class="product-price">129.900 Kz</span>
-            </div>
-            <p class="product-note">Alfaiataria elegante para eventos e rotina executiva.</p>
-          </div>
-        </article>
+      <div class="products-grid" id="products-container"></div>
 
-        <article class="product-card fade-up-element visible" data-id="luna-dress" data-category="Feminino"
-          data-name="Luna Midi Dress" data-price="54900" data-stock="18">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Luna Midi Dress" class="product-image">
-            <span class="product-badge">Novo</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Luna Midi Dress">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
+      <!-- MODELO DE LAYOUT
+      <article class="product-card fade-up-element visible" data-id="zenith" data-category="Masculino"
+        data-badge="premium" data-name="Zenith Social Set" data-price="129900" data-stock="12">
+        <div class="product-image-container">
+          <img src="images/roupaSocial.jpg" alt="Zenith Social Set" class="product-image">
+          <span class="product-badge badge-premium" data-badge="premium">Premium</span>
+          <button class="favorite-btn" type="button" aria-label="Favoritar Zenith Social Set">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg>
+          </button>
+          <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
+        </div>
+        <div class="product-info">
+          <span class="product-category">Masculino</span>
+          <div class="product-meta">
+            <h3 class="product-name">Zenith Social Set</h3>
+            <span class="product-price">129.900 Kz</span>
           </div>
-          <div class="product-info">
-            <span class="product-category">Feminino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Luna Midi Dress</h3>
-              <span class="product-price">54.900 Kz</span>
-            </div>
-            <p class="product-note">Vestido midi elegante para trabalho, jantar e eventos.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="terra-sneaker" data-category="Calcados"
-          data-name="Terra Knit Sneaker" data-price="45900" data-stock="16">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Terra Knit Sneaker" class="product-image">
-            <span class="product-badge">Conforto</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Terra Knit Sneaker">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Calçados &amp; Tênis</span>
-            <div class="product-meta">
-              <h3 class="product-name">Terra Knit Sneaker</h3>
-              <span class="product-price">45.900 Kz</span>
-            </div>
-            <p class="product-note">Tenis versatil para uso diario e viagens.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="noir-belt" data-category="Acessorios"
-          data-name="Noir Leather Belt" data-price="22500" data-stock="21">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Noir Leather Belt" class="product-image">
-            <span class="product-badge">Essencial</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Noir Leather Belt">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Acessórios</span>
-            <div class="product-meta">
-              <h3 class="product-name">Noir Leather Belt</h3>
-              <span class="product-price">22.500 Kz</span>
-            </div>
-            <p class="product-note">Cinto minimalista para completar looks casuais e sociais.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="aurora-coat" data-category="Feminino"
-          data-name="Aurora Linen Coat" data-price="78900" data-stock="9">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Aurora Linen Coat" class="product-image">
-            <span class="product-badge">Eco</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Aurora Linen Coat">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Feminino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Aurora Linen Coat</h3>
-              <span class="product-price">78.900 Kz</span>
-            </div>
-            <p class="product-note">Camada leve para looks casuais bem resolvidos.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="atlas-shirt" data-category="Masculino"
-          data-name="Atlas Oxford Shirt" data-price="34900" data-stock="16">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Atlas Oxford Shirt" class="product-image">
-            <span class="product-badge">Classico</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Atlas Oxford Shirt">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Masculino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Atlas Oxford Shirt</h3>
-              <span class="product-price">34.900 Kz</span>
-            </div>
-            <p class="product-note">Camisa oxford estruturada para rotinas elegantes.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="mira-heels" data-category="Calcados"
-          data-name="Mira Soft Heels" data-price="49900" data-stock="14">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Mira Soft Heels" class="product-image">
-            <span class="product-badge">Elegante</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Mira Soft Heels">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Calçados &amp; Tênis</span>
-            <div class="product-meta">
-              <h3 class="product-name">Mira Soft Heels</h3>
-              <span class="product-price">49.900 Kz</span>
-            </div>
-            <p class="product-note">Salto confortavel para eventos e dias de escritorio.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="solis-bag" data-category="Acessorios"
-          data-name="Solis Crossbody Bag" data-price="39900" data-stock="11">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Solis Crossbody Bag" class="product-image">
-            <span class="product-badge">Pratico</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Solis Crossbody Bag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Acessórios</span>
-            <div class="product-meta">
-              <h3 class="product-name">Solis Crossbody Bag</h3>
-              <span class="product-price">39.900 Kz</span>
-            </div>
-            <p class="product-note">Bolsa transversal compacta para o essencial do dia.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="noah-chino" data-category="Masculino"
-          data-name="Noah Slim Chino" data-price="42900" data-stock="5">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Noah Slim Chino" class="product-image">
-            <span class="product-badge">Best seller</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Noah Slim Chino">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Masculino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Noah Slim Chino</h3>
-              <span class="product-price">42.900 Kz</span>
-            </div>
-            <p class="product-note">Calca chino com corte limpo para combinar facil.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="eva-set" data-category="Feminino"
-          data-name="Eva Tailored Set" data-price="89900" data-stock="8">
-          <div class="product-image-container">
-            <img src="images/roupaSocial.jpg" alt="Eva Tailored Set" class="product-image">
-            <span class="product-badge">Alfaiataria</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Eva Tailored Set">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Feminino</span>
-            <div class="product-meta">
-              <h3 class="product-name">Eva Tailored Set</h3>
-              <span class="product-price">89.900 Kz</span>
-            </div>
-            <p class="product-note">Conjunto de alfaiataria feminino com presenca premium.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="stride-loafer" data-category="Calcados"
-          data-name="Stride Leather Loafer" data-price="59900" data-stock="19">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Stride Leather Loafer" class="product-image">
-            <span class="product-badge">Couro</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Stride Leather Loafer">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Calçados &amp; Tênis</span>
-            <div class="product-meta">
-              <h3 class="product-name">Stride Leather Loafer</h3>
-              <span class="product-price">59.900 Kz</span>
-            </div>
-            <p class="product-note">Loafer em couro para uma base elegante e confortavel.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="aria-scarf" data-category="Acessorios"
-          data-name="Aria Silk Scarf" data-price="19900" data-stock="24">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Aria Silk Scarf" class="product-image">
-            <span class="product-badge">Detalhe</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Aria Silk Scarf">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ao carrinho">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Acessórios</span>
-            <div class="product-meta">
-              <h3 class="product-name">Aria Silk Scarf</h3>
-              <span class="product-price">19.900 Kz</span>
-            </div>
-            <p class="product-note">Lenco leve para dar acabamento a looks minimalistas.</p>
-          </div>
-        </article>
-      </div>
+          <p class="product-note">Alfaiataria elegante para eventos e rotina executiva.</p>
+        </div>
+      </article>
+      -->
     </div>
   </section>
 
@@ -635,7 +373,7 @@
       <div class="container bottom-container">
         <div class="copyright-admin-box">
           <p>&copy; 2026 Lumina. Todos os direitos reservados.</p>
-          <a href="login.html" class="admin-link" title="Painel Administrativo">⚙</a>
+          <a href="admin.html" class="admin-link" title="Painel Administrativo">⚙</a>
         </div>
 
         <div class="dev-credits">
@@ -652,6 +390,8 @@
     </div>
   </footer>
 
+  <script src="js/lumina-store.js"></script>
+  <script src="js/catalog.js"></script>
   <script src="js/product-modal.js"></script>
   <script src="js/script.js"></script>
 </body>

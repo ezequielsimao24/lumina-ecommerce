@@ -5,8 +5,9 @@ const heroToast = document.getElementById('heroToast');
 const sliderDots = document.getElementById('sliderDots');
 const navbar = document.querySelector('.navbar');
 
-const productCards = Array.from(document.querySelectorAll('.product-card'));
-const productsGrid = document.querySelector('.products-grid');
+const productCards = [];
+const productsContainer = document.getElementById('products-container');
+const productsGrid = productsContainer;
 const categoryButtons = Array.from(document.querySelectorAll('.category-btn'));
 const categoryLinks = Array.from(document.querySelectorAll('[data-category-link]'));
 const searchToggleBtn = document.querySelector('.search-toggle-btn');
@@ -61,22 +62,16 @@ let favoritos = loadFromStorage('lumina-favorites', []);
 const buttonResetTimers = new WeakMap();
 let ultimoTotalCarrinho = carrinho.reduce((total, item) => total + item.quantity, 0);
 const freteGratisMeta = 150000;
-const whatsappPedidoNumero = '244952685457';
 
-const productBadgeById = {
-    zenith: 'premium',
-    'luna-dress': 'novo',
-    'terra-sneaker': 'conforto',
-    'noir-belt': 'essencial',
-    'aurora-coat': 'eco',
-    'atlas-shirt': 'classico',
-    'mira-heels': 'elegante',
-    'solis-bag': 'pratico',
-    'noah-chino': 'bestseller',
-    'eva-set': 'alfaiataria',
-    'stride-loafer': 'couro',
-    'aria-scarf': 'detalhe'
-};
+function getSiteConfig() {
+    return window.LuminaStore?.getConfig() || {
+        whatsapp: { number: '244952685457', defaultMessage: '' }
+    };
+}
+
+function getWhatsappNumber() {
+    return String(getSiteConfig().whatsapp?.number || '244952685457').replace(/\D/g, '');
+}
 
 const productBadgeLabels = {
     premium: 'Premium',
@@ -92,6 +87,15 @@ const productBadgeLabels = {
     couro: 'Couro',
     detalhe: 'Detalhe'
 };
+
+const categoryLabels = {
+    Masculino: 'Masculino',
+    Feminino: 'Feminino',
+    Calcados: 'Calçados & Tênis',
+    Acessorios: 'Acessórios'
+};
+
+const FAVORITE_ICON_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
 
 function loadFromStorage(key, fallback) {
     try {
@@ -162,8 +166,85 @@ function updateDots() {
     });
 }
 
+function formatCardPrice(price) {
+    return `${Number(price).toLocaleString('de-DE')} Kz`;
+}
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function refreshProductCardsRef() {
+    productCards.length = 0;
+    productCards.push(...Array.from(productsContainer?.querySelectorAll('.product-card') || []));
+}
+
+function createProductCard(product) {
+    const badgeKey = product.badge || '';
+    const badgeLabel = productBadgeLabels[badgeKey] || badgeKey;
+    const categoryLabel = categoryLabels[product.category] || product.category;
+    const displayPrice = product.salePrice ? product.salePrice : product.price;
+    const priceMarkup = product.salePrice
+        ? `<span class="product-price"><span style="text-decoration:line-through;opacity:.55;margin-right:6px;font-size:12px;">${formatCardPrice(product.price)}</span>${formatCardPrice(product.salePrice)}</span>`
+        : `<span class="product-price">${formatCardPrice(product.price)}</span>`;
+    const card = document.createElement('article');
+
+    card.className = 'product-card fade-up-element visible';
+    card.dataset.id = product.id;
+    card.dataset.category = product.category;
+    card.dataset.badge = badgeKey;
+    card.dataset.name = product.name;
+    card.dataset.price = String(displayPrice);
+    card.dataset.stock = String(product.stock);
+
+    card.innerHTML = `
+        <div class="product-image-container">
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-image">
+            <span class="product-badge badge-${escapeHtml(badgeKey)}" data-badge="${escapeHtml(badgeKey)}">${escapeHtml(badgeLabel)}</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar ${escapeHtml(product.name)}">
+                ${FAVORITE_ICON_SVG}
+            </button>
+            <button class="add-to-bag-btn" type="button" aria-label="Adicionar ${escapeHtml(product.name)} ao carrinho">Adicionar ao carrinho</button>
+        </div>
+        <div class="product-info">
+            <span class="product-category">${escapeHtml(categoryLabel)}</span>
+            <div class="product-meta">
+                <h3 class="product-name">${escapeHtml(product.name)}</h3>
+                ${priceMarkup}
+            </div>
+            <p class="product-note">${escapeHtml(product.note)}</p>
+        </div>
+    `;
+
+    return card;
+}
+
+function renderProductCatalog() {
+    if (!productsContainer || !window.LuminaCatalog) return;
+
+    window.LuminaCatalog.reloadProducts();
+    const products = window.LuminaCatalog.getProducts().filter(product => !product.indisponivel);
+    productsContainer.innerHTML = '';
+
+    products.forEach(product => {
+        const card = createProductCard(product);
+        productsContainer.appendChild(card);
+        setupProductCard(card);
+    });
+
+    refreshProductCardsRef();
+    atualizarFavoritos();
+    ordenarProdutos();
+    filtrarProdutos();
+}
+
 function getProductBadgeKey(card) {
-    return card.dataset.badge || productBadgeById[card.dataset.id] || '';
+    return card.dataset.badge || window.LuminaCatalog?.getProductById(card.dataset.id)?.badge || '';
 }
 
 function setupProductCard(card) {
@@ -243,6 +324,21 @@ function handleProductGridKeydown(event) {
 }
 
 function getProductData(card) {
+    const catalogProduct = window.LuminaCatalog?.getProductById(card.dataset.id);
+
+    if (catalogProduct) {
+        const unitPrice = Number(catalogProduct.salePrice || catalogProduct.price);
+        return {
+            id: catalogProduct.id,
+            name: catalogProduct.name,
+            category: catalogProduct.category,
+            price: unitPrice,
+            stock: Number(catalogProduct.stock || 0),
+            image: catalogProduct.image,
+            quantity: 1
+        };
+    }
+
     return {
         id: card.dataset.id,
         name: card.dataset.name,
@@ -275,8 +371,9 @@ function normalizeCategory(category) {
 
 
 function ordenarProdutos() {
-    const grid = document.querySelector('.products-grid');
-    if (!grid) return;
+    if (!productsContainer) return;
+
+    const catalogOrder = window.LuminaCatalog?.getProducts().map(product => product.id) || [];
 
     const sortedCards = [...productCards].sort((a, b) => {
         if (ordenacaoAtual === 'price-low') {
@@ -291,10 +388,11 @@ function ordenarProdutos() {
             return a.dataset.name.localeCompare(b.dataset.name);
         }
 
-        return productCards.indexOf(a) - productCards.indexOf(b);
+        return catalogOrder.indexOf(a.dataset.id) - catalogOrder.indexOf(b.dataset.id);
     });
 
-    sortedCards.forEach(card => grid.appendChild(card));
+    sortedCards.forEach(card => productsContainer.appendChild(card));
+    refreshProductCardsRef();
 }
 
 function setActiveCategory(category) {
@@ -499,13 +597,14 @@ function getFormValue(formData, key, fallback = 'Nao informado') {
 function montarMensagemWhatsapp(formData) {
     const subtotal = getCarrinhoSubtotal();
     const totalItems = carrinho.reduce((total, item) => total + item.quantity, 0);
+    const intro = String(getSiteConfig().whatsapp?.defaultMessage || '').trim();
     const linhasProdutos = carrinho.map((item, index) => {
         const itemTotal = item.price * item.quantity;
         return `${index + 1}. ${item.name}\n   Categoria: ${item.category}\n   Quantidade: ${item.quantity}\n   Preco unitario: ${currencyFormatter.format(item.price)}\n   Total do item: ${currencyFormatter.format(itemTotal)}`;
     }).join('\n\n');
 
     return [
-        '*NOVO PEDIDO - LUMINA*',
+        intro || '*NOVO PEDIDO - LUMINA*',
         '',
         '*Dados do cliente*',
         `Nome: ${getFormValue(formData, 'customerName')}`,
@@ -639,8 +738,9 @@ function finalizarPedido(event) {
 
     const formData = new FormData(checkoutForm);
     const mensagem = montarMensagemWhatsapp(formData);
-    const whatsappUrl = `https://wa.me/${whatsappPedidoNumero}?text=${encodeURIComponent(mensagem)}`;
+    const whatsappUrl = `https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(mensagem)}`;
 
+    window.LuminaStore?.incrementWhatsappClicks('Checkout finalizado na Home');
     showToast('Abrindo WhatsApp para finalizar o pedido.');
     window.location.href = whatsappUrl;
 }
@@ -717,7 +817,7 @@ favoritesOnly?.addEventListener('change', event => {
     filtrarProdutos();
 });
 
-productCards.forEach(setupProductCard);
+renderProductCatalog();
 productsGrid?.addEventListener('click', handleProductGridClick);
 productsGrid?.addEventListener('keydown', handleProductGridKeydown);
 
@@ -762,9 +862,14 @@ cartItemsEl?.addEventListener('click', event => {
 newsletterForm?.addEventListener('submit', event => {
     event.preventDefault();
     const emailInput = newsletterForm.querySelector('input[type="email"]');
-    showToast('Email cadastrado para novidades.');
+    const email = String(emailInput?.value || '').trim();
+
+    if (!email) return;
+
+    const added = window.LuminaStore?.addNewsletterLead(email);
     newsletterForm.reset();
     emailInput?.blur();
+    showToast(added ? 'Obrigado! E-mail registado com sucesso.' : 'Este e-mail ja esta inscrito na newsletter.');
 });
 
 document.addEventListener('keydown', event => {
@@ -934,13 +1039,13 @@ if (document.getElementById('loginForm') || document.getElementById('registerFor
     initAuthEventListeners();
 }
 
-atualizarFavoritos();
 atualizarPrecoMaximo();
 renderCarrinho();
-filtrarProdutos();
 
 window.LuminaPage = {
     syncScrollLock: syncPageScrollLock,
     productBadgeLabels,
-    getProductBadgeKey
+    categoryLabels,
+    getProductBadgeKey,
+    renderProductCatalog
 };

@@ -29,18 +29,6 @@
         Acessorios: 'Acessórios'
     };
 
-    function resolveBadge(card, badgeText) {
-        const badgeKey = window.LuminaPage?.getProductBadgeKey?.(card)
-            || card.dataset.badge
-            || card.querySelector('.product-badge')?.dataset.badge
-            || '';
-        const label = window.LuminaPage?.productBadgeLabels?.[badgeKey]
-            || badgeText
-            || 'Lumina';
-
-        return { key: badgeKey, label };
-    }
-
     const colorTokens = {
         Preto: '#111827',
         Branco: '#f8fafc',
@@ -56,70 +44,17 @@
         Castanho: '#7c4a2d'
     };
 
-    const productDetails = {
-        zenith: {
-            sizes: ['S', 'M', 'L', 'XL'],
-            colors: ['Preto', 'Azul', 'Cinza'],
-            description: 'Conjunto social com corte limpo, tecido estruturado e acabamento discreto para eventos, reunioes e rotina executiva.'
-        },
-        'luna-dress': {
-            sizes: ['XS', 'S', 'M', 'L'],
-            colors: ['Preto', 'Marfim', 'Vinho'],
-            description: 'Vestido midi de caimento elegante, pensado para transitar entre escritorio, jantar e momentos especiais.'
-        },
-        'terra-sneaker': {
-            sizes: ['38', '39', '40', '41', '42', '43'],
-            colors: ['Branco', 'Preto', 'Verde'],
-            description: 'Tenis knit leve, respiravel e facil de combinar, com sola confortavel para longos dias em movimento.'
-        },
-        'noir-belt': {
-            sizes: ['90', '95', '100', '105'],
-            colors: ['Preto', 'Castanho'],
-            description: 'Cinto de pele com fivela discreta e acabamento minimalista para equilibrar looks casuais e sociais.'
-        },
-        'aurora-coat': {
-            sizes: ['S', 'M', 'L'],
-            colors: ['Camel', 'Marfim', 'Preto'],
-            description: 'Casaco leve em linho misto, ideal para criar camadas elegantes sem pesar no visual.'
-        },
-        'atlas-shirt': {
-            sizes: ['S', 'M', 'L', 'XL'],
-            colors: ['Branco', 'Azul', 'Preto'],
-            description: 'Camisa oxford com estrutura, toque macio e visual limpo para uma rotina masculina bem composta.'
-        },
-        'mira-heels': {
-            sizes: ['36', '37', '38', '39', '40'],
-            colors: ['Preto', 'Nude', 'Dourado'],
-            description: 'Salto de perfil elegante com palmilha macia para manter postura, conforto e presenca.'
-        },
-        'solis-bag': {
-            sizes: ['Unico'],
-            colors: ['Preto', 'Camel', 'Marfim'],
-            description: 'Bolsa transversal compacta, com espaco para o essencial e alca ajustavel para uso diario.'
-        },
-        'noah-chino': {
-            sizes: ['38', '40', '42', '44', '46'],
-            colors: ['Preto', 'Camel', 'Cinza'],
-            description: 'Calca chino slim com corte versatil para combinar com camisa, polo, tenis ou loafer.'
-        },
-        'eva-set': {
-            sizes: ['XS', 'S', 'M', 'L'],
-            colors: ['Preto', 'Marfim', 'Verde'],
-            description: 'Conjunto feminino de alfaiataria com linhas firmes, proporcao moderna e presenca premium.'
-        },
-        'stride-loafer': {
-            sizes: ['39', '40', '41', '42', '43'],
-            colors: ['Preto', 'Castanho'],
-            description: 'Loafer em pele com perfil classico, feito para elevar producoes sociais sem perder conforto.'
-        },
-        'aria-scarf': {
-            sizes: ['Unico'],
-            colors: ['Marfim', 'Azul', 'Dourado'],
-            description: 'Lenco macio e leve para usar no pescoco, cabelo, bolsa ou como detalhe final do look.'
-        }
-    };
-
     let activeCard = null;
+
+    function getProductById(id) {
+        return window.LuminaCatalog?.getProductById(id) || null;
+    }
+
+    function resolveBadge(product) {
+        const badgeKey = product.badge || '';
+        const label = window.LuminaPage?.productBadgeLabels?.[badgeKey] || badgeKey || 'Lumina';
+        return { key: badgeKey, label };
+    }
 
     function setActiveChoice(group, value) {
         group.querySelectorAll('.detail-choice').forEach(button => {
@@ -129,6 +64,7 @@
     }
 
     function renderChoices(group, values, type) {
+        if (!group) return;
         group.innerHTML = '';
 
         values.forEach((value, index) => {
@@ -152,30 +88,15 @@
         });
     }
 
-    function getCardData(card) {
-        const id = card.dataset.id;
-        const fallbackNote = card.querySelector('.product-note')?.textContent?.trim() || '';
-
-        return {
-            id,
-            name: card.dataset.name || card.querySelector('.product-name')?.textContent?.trim() || '',
-            category: card.dataset.category || '',
-            price: Number(card.dataset.price || 0),
-            stock: Number(card.dataset.stock || 0),
-            image: card.querySelector('.product-image')?.getAttribute('src') || '',
-            badge: resolveBadge(card, card.querySelector('.product-badge')?.textContent?.trim() || ''),
-            details: productDetails[id] || {
-                sizes: ['S', 'M', 'L'],
-                colors: ['Preto', 'Branco'],
-                description: fallbackNote
-            }
-        };
-    }
-
     function openProductDetail(card) {
+        const product = getProductById(card.dataset.id);
+        if (!product) return;
+
         activeCard = card;
-        const product = getCardData(card);
-        const badge = product.badge;
+        const badge = resolveBadge(product);
+        const sizes = product.sizes?.length ? product.sizes : ['S', 'M', 'L'];
+        const colors = product.colors?.length ? product.colors : ['Preto', 'Branco'];
+        const description = product.description || product.note || '';
 
         detailImage.src = product.image;
         detailImage.alt = product.name;
@@ -186,12 +107,12 @@
         }
         detailCategory.textContent = categoryLabels[product.category] || product.category;
         detailTitle.textContent = product.name;
-        detailPrice.textContent = formatter.format(product.price);
-        detailDescription.textContent = product.details.description;
+        detailPrice.textContent = formatter.format(product.salePrice || product.price);
+        detailDescription.textContent = description;
         detailStock.textContent = `${product.stock} unidade${product.stock === 1 ? '' : 's'} disponiveis`;
 
-        renderChoices(detailSizes, product.details.sizes, 'size');
-        renderChoices(detailColors, product.details.colors, 'color');
+        renderChoices(detailSizes, sizes, 'size');
+        renderChoices(detailColors, colors, 'color');
 
         detailContent?.scrollTo(0, 0);
 
