@@ -9,6 +9,7 @@
     background: rgba(2, 6, 23, 0.58);
     opacity: 0;
     pointer-events: none;
+    overscroll-behavior: none;
     transition: opacity 0.22s ease;
 }
 
@@ -23,8 +24,8 @@
     width: min(440px, 100%);
     max-height: calc(100vh - 32px);
     max-height: calc(100dvh - 32px);
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     border-radius: 16px;
     background: #ffffff;
@@ -56,6 +57,7 @@
 
 .product-detail-media {
     position: relative;
+    flex-shrink: 0;
     min-height: 220px;
     max-height: 34vh;
     background: #0b0c10;
@@ -91,7 +93,11 @@
 }
 
 .product-detail-content {
-    overflow: auto;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     padding: 22px 20px 20px;
 }
 
@@ -216,22 +222,74 @@
 
 @media (max-width: 820px) {
     .product-detail-modal {
-        padding: 10px;
-        align-items: flex-end;
+        padding: 10px 12px;
+        align-items: center;
     }
 
     .product-detail-panel {
-        max-height: calc(100vh - 20px);
-        max-height: calc(100dvh - 20px);
-        border-radius: 14px 14px 0 0;
+        width: min(100%, 340px);
+        max-height: min(68dvh, 520px);
+        border-radius: 14px;
     }
 
     .product-detail-media {
-        min-height: 180px;
-        max-height: 32vh;
+        min-height: 120px;
+        max-height: 24dvh;
     }
 
     .product-detail-content {
-        padding: 18px 16px 16px;
+        padding: 14px 14px 12px;
+    }
+
+    .product-detail-content h2 {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+
+    .product-detail-price {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .product-detail-description {
+        font-size: 13px;
+        margin-bottom: 14px;
+        line-height: 1.55;
+    }
+
+    .product-detail-options {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .product-detail-fit {
+        margin-bottom: 14px;
+        padding: 10px 0;
+        font-size: 11px;
+    }
+
+    .detail-choice {
+        min-height: 34px;
+        padding: 0 12px;
+        font-size: 11px;
+    }
+
+    .product-detail-actions .checkout-btn,
+    .product-detail-actions .clear-cart-btn {
+        min-height: 40px;
+        padding: 11px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 380px) {
+    .product-detail-panel {
+        width: min(100%, 300px);
+        max-height: min(64dvh, 480px);
+    }
+
+    .product-detail-media {
+        min-height: 108px;
+        max-height: 22dvh;
     }
 }

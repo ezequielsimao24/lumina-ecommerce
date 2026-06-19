@@ -425,8 +425,44 @@ function atualizarOverlay() {
     overlay.classList.toggle('show', carrinhoAberto || checkoutAberto);
 }
 
+function isPageScrollLocked() {
+    const modalOpen = document.getElementById('productDetailModal')?.classList.contains('open');
+    return carrinhoAberto || checkoutAberto || modalOpen;
+}
+
+let savedScrollY = 0;
+
 function bloquearScrollPagina(bloquear) {
-    document.body.classList.toggle('no-scroll', bloquear);
+    const shouldLock = typeof bloquear === 'boolean' ? bloquear : isPageScrollLocked();
+
+    if (shouldLock) {
+        if (!document.body.classList.contains('no-scroll')) {
+            savedScrollY = window.scrollY;
+            document.documentElement.classList.add('no-scroll');
+            document.body.classList.add('no-scroll');
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${savedScrollY}px`;
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+        }
+        return;
+    }
+
+    if (!isPageScrollLocked()) {
+        document.documentElement.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, savedScrollY);
+    }
+}
+
+function syncPageScrollLock() {
+    bloquearScrollPagina(isPageScrollLocked());
 }
 
 function toggleCart(open) {
@@ -440,7 +476,7 @@ function toggleCart(open) {
     cartDrawer.classList.toggle('open', open);
     cartDrawer.setAttribute('aria-hidden', String(!open));
     atualizarOverlay();
-    bloquearScrollPagina(carrinhoAberto || checkoutAberto);
+    bloquearScrollPagina(isPageScrollLocked());
 }
 
 function toggleCheckoutModal(open, options = {}) {
@@ -478,7 +514,7 @@ function toggleCheckoutModal(open, options = {}) {
     }
 
     atualizarOverlay();
-    bloquearScrollPagina(carrinhoAberto || checkoutAberto);
+    bloquearScrollPagina(isPageScrollLocked());
 }
 
 function finalizarPedido(event) {
@@ -822,3 +858,6 @@ atualizarPrecoMaximo();
 renderCarrinho();
 filtrarProdutos();
 
+window.LuminaPage = {
+    syncScrollLock: syncPageScrollLock
+};

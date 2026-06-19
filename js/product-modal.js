@@ -177,7 +177,7 @@
 
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('no-scroll');
+        window.LuminaPage?.syncScrollLock?.();
 
         requestAnimationFrame(() => closeBtn?.focus());
     }
@@ -185,7 +185,7 @@
     function closeProductDetail() {
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('no-scroll');
+        window.LuminaPage?.syncScrollLock?.();
         activeCard = null;
     }
 
