@@ -37,19 +37,20 @@ const shippingBar = document.getElementById('shippingBar');
 const overlay = document.getElementById('overlay');
 const newsletterForm = document.getElementById('newsletterForm');
 
-const totalSlidesReais = Math.max(slides.length - 1, 0);
+const totalSlidesReais = slides.length;
 const tempoTroca = 6000;
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+const currencyFormatter = new Intl.NumberFormat('pt-AO', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'AOA',
+    maximumFractionDigits: 0
 });
 
 let indexAtual = 0;
 let autoplayAtivo = true;
-let categoriaAtual = 'All';
+let categoriaAtual = 'Todos';
 let termoBusca = '';
 let ordenacaoAtual = 'featured';
-let precoMaximo = Number(priceRange?.value || 2500);
+let precoMaximo = Number(priceRange?.value || 250000);
 let mostrarApenasFavoritos = false;
 let toastTimer;
 let carrinhoAberto = false;
@@ -58,7 +59,7 @@ let carrinho = loadFromStorage('lumina-cart', []);
 let favoritos = loadFromStorage('lumina-favorites', []);
 const buttonResetTimers = new WeakMap();
 let ultimoTotalCarrinho = carrinho.reduce((total, item) => total + item.quantity, 0);
-const freteGratisMeta = 600;
+const freteGratisMeta = 150000;
 const whatsappPedidoNumero = '244952685457';
 
 function loadFromStorage(key, fallback) {
@@ -90,24 +91,12 @@ function irParaSlide(nextIndex) {
     if (!sliderWrapper || !slides.length) return;
 
     slides[indexAtual]?.classList.remove('active-slide');
-    indexAtual = nextIndex;
+    indexAtual = (nextIndex + slides.length) % slides.length;
 
     sliderWrapper.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
     sliderWrapper.style.transform = `translateX(-${indexAtual * 100}vw)`;
     slides[indexAtual]?.classList.add('active-slide');
     updateDots();
-
-    if (indexAtual === totalSlidesReais) {
-        setTimeout(() => {
-            sliderWrapper.style.transition = 'none';
-            slides[indexAtual]?.classList.remove('active-slide');
-            indexAtual = 0;
-            sliderWrapper.style.transform = 'translateX(0vw)';
-            void sliderWrapper.offsetWidth;
-            slides[indexAtual]?.classList.add('active-slide');
-            updateDots();
-        }, 800);
-    }
 }
 
 function alternarSlide() {
@@ -155,31 +144,18 @@ function getProductData(card) {
 }
 
 function normalizeCategory(category) {
-    const c = String(category || 'All').trim();
-    // Mapeia categorias em PT para IDs internos (ingles/sem acento) usados no HTML dos produtos
+    const c = String(category || 'Todos').trim();
+    // Mantem os filtros alinhados as categorias reais da vitrine.
     const map = {
-        'todos': 'all',
-        'eletrónica': 'electronics',
-        'eletronica': 'electronics',
-        'moda': 'fashion',
-        'mobiliário': 'furniture',
-        'mobiliario': 'furniture',
-        'cozinha': 'kitchen',
-        'desporto': 'sports',
-        'belez a': 'beauty',
-        'beleza': 'beauty',
-        'infantil': 'kids',
-        'livros': 'books',
-        'automóveis': 'automotive',
-        'automoveis': 'automotive',
-        'decoração casa': 'homedecor',
-        'decoracao casa': 'homedecor',
-        'decoraçao casa': 'homedecor',
-        'roupa de cama': 'bedding',
-        'banho': 'bath',
-        'pets': 'pets',
-        'escritório': 'office',
-        'escritorio': 'office'
+        'todos': 'todos',
+        'masculino': 'masculino',
+        'feminino': 'feminino',
+        'calcados': 'calcados',
+        'calcados & tenis': 'calcados',
+        'calçados': 'calcados',
+        'calçados & tênis': 'calcados',
+        'acessorios': 'acessorios',
+        'acessórios': 'acessorios'
     };
 
     const lower = c.toLowerCase();
@@ -228,7 +204,7 @@ function filtrarProdutos() {
         const name = card.dataset.name.toLowerCase();
         const category = card.dataset.category.toLowerCase();
         const price = Number(card.dataset.price);
-        const matchesCategory = normalizeCategory(categoriaAtual) === 'all'
+        const matchesCategory = normalizeCategory(categoriaAtual) === 'todos'
             || normalizeCategory(card.dataset.category) === normalizeCategory(categoriaAtual);
         const matchesSearch = !termo || name.includes(termo) || category.includes(termo);
         const matchesPrice = price <= precoMaximo;
@@ -247,9 +223,9 @@ function filtrarProdutos() {
 }
 
 function atualizarPrecoMaximo() {
-    precoMaximo = Number(priceRange?.value || 2500);
+    precoMaximo = Number(priceRange?.value || 250000);
     if (priceRangeValue) {
-        priceRangeValue.textContent = currencyFormatter.format(precoMaximo).replace('.00', '');
+        priceRangeValue.textContent = currencyFormatter.format(precoMaximo);
     }
     filtrarProdutos();
 }
@@ -597,11 +573,23 @@ favoritesOnly?.addEventListener('change', event => {
 productCards.forEach(card => {
     const addButton = card.querySelector('.add-to-bag-btn');
     const favoriteButton = card.querySelector('.favorite-btn');
+    const productName = card.dataset.name || card.querySelector('.product-name')?.textContent?.trim() || 'produto';
 
-    card.addEventListener('click', event => {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Ver detalhes de ${productName}`);
+
+    function openProductDetailFromCard(event) {
         if (event.target.closest('button, a, input, select, textarea, label')) return;
-        adicionarAoCarrinho(card);
-        mostrarProdutoAdicionado(card);
+        window.LuminaProductDetails?.openProductDetail(card);
+    }
+
+    card.addEventListener('click', openProductDetailFromCard);
+
+    card.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openProductDetailFromCard(event);
     });
 
     addButton?.addEventListener('click', event => {

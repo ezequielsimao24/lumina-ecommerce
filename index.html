@@ -12,6 +12,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/product-modal.css">
 </head>
 
 <body>
@@ -35,6 +36,7 @@
 
       <div class="nav-right">
         <a href="#collection" class="nav-link">SHOP</a>
+        <a href="pages/sobre.html" class="nav-link">SOBRE</a>
         <button class="cart-btn" type="button" aria-label="Abrir carrinho">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -94,7 +96,7 @@
   <section class="collection-section" id="collection">
     <div class="container">
       <header class="collection-header fade-up-element visible">
-        <h2 class="collection-title">The Collection</h2>
+        <h2 class="collection-title">Colecao Lumina</h2>
         <p class="collection-subtitle">Qualidade, estilo e funcionalidade em uma vitrine simples de comprar.</p>
       </header>
 
@@ -136,8 +138,8 @@
         </label>
 
         <label class="tool-field price-tool">
-          <span>Preco maximo: <strong id="priceRangeValue">$2,500</strong></span>
-          <input type="range" id="priceRange" min="100" max="2500" step="50" value="2500"
+          <span>Preco maximo: <strong id="priceRangeValue">250.000 Kz</strong></span>
+          <input type="range" id="priceRange" min="5000" max="250000" step="5000" value="250000"
             aria-label="Preco maximo">
         </label>
 
@@ -150,8 +152,8 @@
       <p class="results-status" id="resultsStatus" aria-live="polite"></p>
 
       <div class="products-grid">
-        <article class="product-card fade-up-element visible" data-id="zenith" data-category="Fashion"
-          data-name="Zenith Social Set" data-price="1299.99" data-stock="12">
+        <article class="product-card fade-up-element visible" data-id="zenith" data-category="Masculino"
+          data-name="Zenith Social Set" data-price="129900" data-stock="12">
           <div class="product-image-container">
             <img src="images/roupaSocial.jpg" alt="Zenith Social Set" class="product-image">
             <span class="product-badge">Premium</span>
@@ -165,21 +167,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Fashion</span>
+            <span class="product-category">Masculino</span>
             <div class="product-meta">
               <h3 class="product-name">Zenith Social Set</h3>
-              <span class="product-price">$1,299.99</span>
+              <span class="product-price">129.900 Kz</span>
             </div>
             <p class="product-note">Alfaiataria elegante para eventos e rotina executiva.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="lumina-audio" data-category="Electronics"
-          data-name="Lumina Audio Studio" data-price="349.00" data-stock="18">
+        <article class="product-card fade-up-element visible" data-id="luna-dress" data-category="Feminino"
+          data-name="Luna Midi Dress" data-price="54900" data-stock="18">
           <div class="product-image-container">
-            <img src="images/electronicos.jpg" alt="Lumina Audio Studio" class="product-image">
+            <img src="images/roupaSocial.jpg" alt="Luna Midi Dress" class="product-image">
             <span class="product-badge">Novo</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Lumina Audio Studio">
+            <button class="favorite-btn" type="button" aria-label="Favoritar Luna Midi Dress">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -189,89 +191,17 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Electronics</span>
+            <span class="product-category">Feminino</span>
             <div class="product-meta">
-              <h3 class="product-name">Lumina Audio Studio</h3>
-              <span class="product-price">$349.00</span>
+              <h3 class="product-name">Luna Midi Dress</h3>
+              <span class="product-price">54.900 Kz</span>
             </div>
-            <p class="product-note">Audio imersivo com acabamento minimalista.</p>
+            <p class="product-note">Vestido midi elegante para trabalho, jantar e eventos.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="walnut-desk" data-category="Furniture"
-          data-name="Minimalist Walnut Desk" data-price="850.00" data-stock="7">
-          <div class="product-image-container">
-            <img src="images/mobila.jpg" alt="Minimalist Walnut Desk" class="product-image">
-            <span class="product-badge">Design</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Minimalist Walnut Desk">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Furniture</span>
-            <div class="product-meta">
-              <h3 class="product-name">Minimalist Walnut Desk</h3>
-              <span class="product-price">$850.00</span>
-            </div>
-            <p class="product-note">Mesa de trabalho compacta com presenca premium.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="chef-kit" data-category="Kitchen"
-          data-name="Lumina Chef Kit" data-price="129.99" data-stock="21">
-          <div class="product-image-container">
-            <img src="images/kit-cozinha.jpg" alt="Lumina Chef Kit" class="product-image">
-            <span class="product-badge">Essencial</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Lumina Chef Kit">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Kitchen</span>
-            <div class="product-meta">
-              <h3 class="product-name">Lumina Chef Kit</h3>
-              <span class="product-price">$129.99</span>
-            </div>
-            <p class="product-note">Conjunto pratico para preparar e servir com estilo.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="linen-coat" data-category="Fashion"
-          data-name="Aurora Linen Coat" data-price="479.00" data-stock="9">
-          <div class="product-image-container">
-            <img src="images/roupa.jpg" alt="Aurora Linen Coat" class="product-image">
-            <span class="product-badge">Eco</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Aurora Linen Coat">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-              </svg>
-            </button>
-            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
-          </div>
-          <div class="product-info">
-            <span class="product-category">Fashion</span>
-            <div class="product-meta">
-              <h3 class="product-name">Aurora Linen Coat</h3>
-              <span class="product-price">$479.00</span>
-            </div>
-            <p class="product-note">Camada leve para looks casuais bem resolvidos.</p>
-          </div>
-        </article>
-
-        <article class="product-card fade-up-element visible" data-id="terra-sneaker" data-category="Fashion"
-          data-name="Terra Knit Sneaker" data-price="219.00" data-stock="16">
+        <article class="product-card fade-up-element visible" data-id="terra-sneaker" data-category="Calcados"
+          data-name="Terra Knit Sneaker" data-price="45900" data-stock="16">
           <div class="product-image-container">
             <img src="images/roupa.jpg" alt="Terra Knit Sneaker" class="product-image">
             <span class="product-badge">Conforto</span>
@@ -285,21 +215,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Fashion</span>
+            <span class="product-category">Calçados &amp; Tênis</span>
             <div class="product-meta">
               <h3 class="product-name">Terra Knit Sneaker</h3>
-              <span class="product-price">$219.00</span>
+              <span class="product-price">45.900 Kz</span>
             </div>
             <p class="product-note">Tenis versatil para uso diario e viagens.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="nova-watch" data-category="Electronics"
-          data-name="Nova Smart Watch" data-price="289.00" data-stock="14">
+        <article class="product-card fade-up-element visible" data-id="noir-belt" data-category="Acessorios"
+          data-name="Noir Leather Belt" data-price="22500" data-stock="21">
           <div class="product-image-container">
-            <img src="images/electronicos.jpg" alt="Nova Smart Watch" class="product-image">
-            <span class="product-badge">Smart</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Nova Smart Watch">
+            <img src="images/roupaSocial.jpg" alt="Noir Leather Belt" class="product-image">
+            <span class="product-badge">Essencial</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Noir Leather Belt">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -309,21 +239,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Electronics</span>
+            <span class="product-category">Acessórios</span>
             <div class="product-meta">
-              <h3 class="product-name">Nova Smart Watch</h3>
-              <span class="product-price">$289.00</span>
+              <h3 class="product-name">Noir Leather Belt</h3>
+              <span class="product-price">22.500 Kz</span>
             </div>
-            <p class="product-note">Relogio inteligente com foco em rotina e treino.</p>
+            <p class="product-note">Cinto minimalista para completar looks casuais e sociais.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="halo-lamp" data-category="Electronics"
-          data-name="Halo Desk Lamp" data-price="159.00" data-stock="11">
+        <article class="product-card fade-up-element visible" data-id="aurora-coat" data-category="Feminino"
+          data-name="Aurora Linen Coat" data-price="78900" data-stock="9">
           <div class="product-image-container">
-            <img src="images/electronicos.jpg" alt="Halo Desk Lamp" class="product-image">
-            <span class="product-badge">LED</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Halo Desk Lamp">
+            <img src="images/roupa.jpg" alt="Aurora Linen Coat" class="product-image">
+            <span class="product-badge">Eco</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Aurora Linen Coat">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -333,21 +263,93 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Electronics</span>
+            <span class="product-category">Feminino</span>
             <div class="product-meta">
-              <h3 class="product-name">Halo Desk Lamp</h3>
-              <span class="product-price">$159.00</span>
+              <h3 class="product-name">Aurora Linen Coat</h3>
+              <span class="product-price">78.900 Kz</span>
             </div>
-            <p class="product-note">Iluminacao ajustavel para mesas de estudo e trabalho.</p>
+            <p class="product-note">Camada leve para looks casuais bem resolvidos.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="cloud-lounge" data-category="Furniture"
-          data-name="Cloud Lounge Chair" data-price="1190.00" data-stock="5">
+        <article class="product-card fade-up-element visible" data-id="atlas-shirt" data-category="Masculino"
+          data-name="Atlas Oxford Shirt" data-price="34900" data-stock="16">
           <div class="product-image-container">
-            <img src="images/mobila.jpg" alt="Cloud Lounge Chair" class="product-image">
+            <img src="images/roupaSocial.jpg" alt="Atlas Oxford Shirt" class="product-image">
+            <span class="product-badge">Classico</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Atlas Oxford Shirt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+              </svg>
+            </button>
+            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Masculino</span>
+            <div class="product-meta">
+              <h3 class="product-name">Atlas Oxford Shirt</h3>
+              <span class="product-price">34.900 Kz</span>
+            </div>
+            <p class="product-note">Camisa oxford estruturada para rotinas elegantes.</p>
+          </div>
+        </article>
+
+        <article class="product-card fade-up-element visible" data-id="mira-heels" data-category="Calcados"
+          data-name="Mira Soft Heels" data-price="49900" data-stock="14">
+          <div class="product-image-container">
+            <img src="images/roupa.jpg" alt="Mira Soft Heels" class="product-image">
+            <span class="product-badge">Elegante</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Mira Soft Heels">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+              </svg>
+            </button>
+            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Calçados &amp; Tênis</span>
+            <div class="product-meta">
+              <h3 class="product-name">Mira Soft Heels</h3>
+              <span class="product-price">49.900 Kz</span>
+            </div>
+            <p class="product-note">Salto confortavel para eventos e dias de escritorio.</p>
+          </div>
+        </article>
+
+        <article class="product-card fade-up-element visible" data-id="solis-bag" data-category="Acessorios"
+          data-name="Solis Crossbody Bag" data-price="39900" data-stock="11">
+          <div class="product-image-container">
+            <img src="images/roupaSocial.jpg" alt="Solis Crossbody Bag" class="product-image">
+            <span class="product-badge">Pratico</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Solis Crossbody Bag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+              </svg>
+            </button>
+            <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Acessórios</span>
+            <div class="product-meta">
+              <h3 class="product-name">Solis Crossbody Bag</h3>
+              <span class="product-price">39.900 Kz</span>
+            </div>
+            <p class="product-note">Bolsa transversal compacta para o essencial do dia.</p>
+          </div>
+        </article>
+
+        <article class="product-card fade-up-element visible" data-id="noah-chino" data-category="Masculino"
+          data-name="Noah Slim Chino" data-price="42900" data-stock="5">
+          <div class="product-image-container">
+            <img src="images/roupaSocial.jpg" alt="Noah Slim Chino" class="product-image">
             <span class="product-badge">Best seller</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Cloud Lounge Chair">
+            <button class="favorite-btn" type="button" aria-label="Favoritar Noah Slim Chino">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -357,21 +359,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Furniture</span>
+            <span class="product-category">Masculino</span>
             <div class="product-meta">
-              <h3 class="product-name">Cloud Lounge Chair</h3>
-              <span class="product-price">$1,190.00</span>
+              <h3 class="product-name">Noah Slim Chino</h3>
+              <span class="product-price">42.900 Kz</span>
             </div>
-            <p class="product-note">Poltrona macia para salas de estar sofisticadas.</p>
+            <p class="product-note">Calca chino com corte limpo para combinar facil.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="nordic-shelf" data-category="Furniture"
-          data-name="Nordic Open Shelf" data-price="640.00" data-stock="8">
+        <article class="product-card fade-up-element visible" data-id="eva-set" data-category="Feminino"
+          data-name="Eva Tailored Set" data-price="89900" data-stock="8">
           <div class="product-image-container">
-            <img src="images/mobila.jpg" alt="Nordic Open Shelf" class="product-image">
-            <span class="product-badge">Organizacao</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Nordic Open Shelf">
+            <img src="images/roupaSocial.jpg" alt="Eva Tailored Set" class="product-image">
+            <span class="product-badge">Alfaiataria</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Eva Tailored Set">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -381,21 +383,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Furniture</span>
+            <span class="product-category">Feminino</span>
             <div class="product-meta">
-              <h3 class="product-name">Nordic Open Shelf</h3>
-              <span class="product-price">$640.00</span>
+              <h3 class="product-name">Eva Tailored Set</h3>
+              <span class="product-price">89.900 Kz</span>
             </div>
-            <p class="product-note">Estante aberta para expor livros e objetos favoritos.</p>
+            <p class="product-note">Conjunto de alfaiataria feminino com presenca premium.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="stone-pan" data-category="Kitchen"
-          data-name="Stone Pro Pan" data-price="179.00" data-stock="19">
+        <article class="product-card fade-up-element visible" data-id="stride-loafer" data-category="Calcados"
+          data-name="Stride Leather Loafer" data-price="59900" data-stock="19">
           <div class="product-image-container">
-            <img src="images/kit-cozinha.jpg" alt="Stone Pro Pan" class="product-image">
-            <span class="product-badge">Antiaderente</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Stone Pro Pan">
+            <img src="images/roupa.jpg" alt="Stride Leather Loafer" class="product-image">
+            <span class="product-badge">Couro</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Stride Leather Loafer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -405,21 +407,21 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Kitchen</span>
+            <span class="product-category">Calçados &amp; Tênis</span>
             <div class="product-meta">
-              <h3 class="product-name">Stone Pro Pan</h3>
-              <span class="product-price">$179.00</span>
+              <h3 class="product-name">Stride Leather Loafer</h3>
+              <span class="product-price">59.900 Kz</span>
             </div>
-            <p class="product-note">Frigideira robusta para preparo rapido e uniforme.</p>
+            <p class="product-note">Loafer em couro para uma base elegante e confortavel.</p>
           </div>
         </article>
 
-        <article class="product-card fade-up-element visible" data-id="serve-board" data-category="Kitchen"
-          data-name="Oak Serve Board" data-price="109.00" data-stock="24">
+        <article class="product-card fade-up-element visible" data-id="aria-scarf" data-category="Acessorios"
+          data-name="Aria Silk Scarf" data-price="19900" data-stock="24">
           <div class="product-image-container">
-            <img src="images/kit-cozinha.jpg" alt="Oak Serve Board" class="product-image">
-            <span class="product-badge">Mesa posta</span>
-            <button class="favorite-btn" type="button" aria-label="Favoritar Oak Serve Board">
+            <img src="images/roupa.jpg" alt="Aria Silk Scarf" class="product-image">
+            <span class="product-badge">Detalhe</span>
+            <button class="favorite-btn" type="button" aria-label="Favoritar Aria Silk Scarf">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path
                   d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -429,14 +431,54 @@
             <button class="add-to-bag-btn" type="button">Adicionar ao carrinho</button>
           </div>
           <div class="product-info">
-            <span class="product-category">Kitchen</span>
+            <span class="product-category">Acessórios</span>
             <div class="product-meta">
-              <h3 class="product-name">Oak Serve Board</h3>
-              <span class="product-price">$109.00</span>
+              <h3 class="product-name">Aria Silk Scarf</h3>
+              <span class="product-price">19.900 Kz</span>
             </div>
-            <p class="product-note">Tabua para servir entradas, paes e queijos.</p>
+            <p class="product-note">Lenco leve para dar acabamento a looks minimalistas.</p>
           </div>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="product-detail-modal" id="productDetailModal" aria-hidden="true" aria-labelledby="productDetailTitle">
+    <div class="product-detail-panel" role="dialog" aria-modal="true">
+      <button class="product-detail-close" type="button" aria-label="Fechar detalhes">×</button>
+
+      <div class="product-detail-media">
+        <img id="detailImage" src="" alt="">
+        <span id="detailBadge" class="product-detail-badge"></span>
+      </div>
+
+      <div class="product-detail-content">
+        <p id="detailCategory" class="product-detail-category"></p>
+        <h2 id="productDetailTitle"></h2>
+        <strong id="detailPrice" class="product-detail-price"></strong>
+        <p id="detailDescription" class="product-detail-description"></p>
+
+        <div class="product-detail-options">
+          <div>
+            <span class="detail-option-label">Tamanho</span>
+            <div class="detail-option-group" id="detailSizes"></div>
+          </div>
+
+          <div>
+            <span class="detail-option-label">Cor</span>
+            <div class="detail-option-group" id="detailColors"></div>
+          </div>
+        </div>
+
+        <div class="product-detail-fit">
+          <span id="detailStock"></span>
+          <a href="pages/suporte.html#guia-tamanhos">Guia de tamanhos</a>
+        </div>
+
+        <div class="product-detail-actions">
+          <button class="checkout-btn" id="detailAddToCart" type="button">Adicionar ao carrinho</button>
+          <button class="clear-cart-btn" id="detailCloseSecondary" type="button">Continuar vendo</button>
+        </div>
       </div>
     </div>
   </section>
@@ -457,7 +499,7 @@
       </div>
       <div class="cart-total-row">
         <span>Subtotal</span>
-        <strong id="cartSubtotal">$0.00</strong>
+        <strong id="cartSubtotal">0 Kz</strong>
       </div>
       <button class="checkout-btn" id="openCheckoutBtn" type="button">Finalizar Pedido</button>
       <button class="clear-cart-btn" type="button">Limpar carrinho</button>
@@ -557,20 +599,20 @@
       <div class="footer-column">
         <h4 class="footer-title">Shop</h4>
         <ul class="footer-links">
-          <li><a href="#collection">All Products</a></li>
-          <li><a href="#collection">New Arrivals</a></li>
-          <li><a href="#collection">Featured</a></li>
-          <li><a href="#collection">Discounts</a></li>
+          <li><a href="#collection">Todos os produtos</a></li>
+          <li><a href="#collection">Novidades</a></li>
+          <li><a href="#collection">Destaques</a></li>
+          <li><a href="pages/sobre.html">Sobre a Lumina</a></li>
         </ul>
       </div>
 
       <div class="footer-column">
-        <h4 class="footer-title">Support</h4>
+        <h4 class="footer-title">Suporte</h4>
         <ul class="footer-links">
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">Shipping & Returns</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Size Guide</a></li>
+          <li><a href="pages/suporte.html#contato">Contacto</a></li>
+          <li><a href="pages/suporte.html#entregas">Entregas e trocas</a></li>
+          <li><a href="pages/suporte.html#faq">FAQ</a></li>
+          <li><a href="pages/suporte.html#guia-tamanhos">Guia de tamanhos</a></li>
         </ul>
       </div>
 
@@ -593,7 +635,7 @@
       <div class="container bottom-container">
         <div class="copyright-admin-box">
           <p>&copy; 2026 Lumina. Todos os direitos reservados.</p>
-          <a href="loginAdm.html" class="admin-link" title="Painel Administrativo">⚙</a>
+          <a href="login.html" class="admin-link" title="Painel Administrativo">⚙</a>
         </div>
 
         <div class="dev-credits">
@@ -610,6 +652,7 @@
     </div>
   </footer>
 
+  <script src="js/product-modal.js"></script>
   <script src="js/script.js"></script>
 </body>
 
