@@ -6,6 +6,7 @@ const sliderDots = document.getElementById('sliderDots');
 const navbar = document.querySelector('.navbar');
 
 const productCards = Array.from(document.querySelectorAll('.product-card'));
+const productsGrid = document.querySelector('.products-grid');
 const categoryButtons = Array.from(document.querySelectorAll('.category-btn'));
 const categoryLinks = Array.from(document.querySelectorAll('[data-category-link]'));
 const searchToggleBtn = document.querySelector('.search-toggle-btn');
@@ -61,6 +62,36 @@ const buttonResetTimers = new WeakMap();
 let ultimoTotalCarrinho = carrinho.reduce((total, item) => total + item.quantity, 0);
 const freteGratisMeta = 150000;
 const whatsappPedidoNumero = '244952685457';
+
+const productBadgeById = {
+    zenith: 'premium',
+    'luna-dress': 'novo',
+    'terra-sneaker': 'conforto',
+    'noir-belt': 'essencial',
+    'aurora-coat': 'eco',
+    'atlas-shirt': 'classico',
+    'mira-heels': 'elegante',
+    'solis-bag': 'pratico',
+    'noah-chino': 'bestseller',
+    'eva-set': 'alfaiataria',
+    'stride-loafer': 'couro',
+    'aria-scarf': 'detalhe'
+};
+
+const productBadgeLabels = {
+    premium: 'Premium',
+    novo: 'Novo',
+    conforto: 'Conforto',
+    essencial: 'Essencial',
+    eco: 'Eco',
+    classico: 'Clássico',
+    elegante: 'Elegante',
+    pratico: 'Prático',
+    bestseller: 'Best seller',
+    alfaiataria: 'Alfaiataria',
+    couro: 'Couro',
+    detalhe: 'Detalhe'
+};
 
 function loadFromStorage(key, fallback) {
     try {
@@ -129,6 +160,86 @@ function updateDots() {
     dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === indexAtual % totalSlidesReais);
     });
+}
+
+function getProductBadgeKey(card) {
+    return card.dataset.badge || productBadgeById[card.dataset.id] || '';
+}
+
+function setupProductCard(card) {
+    const productName = card.dataset.name || card.querySelector('.product-name')?.textContent?.trim() || 'produto';
+    const badgeKey = getProductBadgeKey(card);
+    const badgeEl = card.querySelector('.product-badge');
+    const imageZone = card.querySelector('.product-image-container');
+    const infoZone = card.querySelector('.product-info');
+    const detailLabel = `Ver detalhes de ${productName}`;
+
+    if (badgeKey) {
+        card.dataset.badge = badgeKey;
+        if (badgeEl) {
+            badgeEl.dataset.badge = badgeKey;
+            badgeEl.className = `product-badge badge-${badgeKey}`;
+            badgeEl.textContent = productBadgeLabels[badgeKey] || badgeEl.textContent;
+        }
+    }
+
+    imageZone?.setAttribute('data-action', 'view-details');
+    imageZone?.setAttribute('tabindex', '0');
+    imageZone?.setAttribute('role', 'button');
+    imageZone?.setAttribute('aria-label', detailLabel);
+
+    infoZone?.setAttribute('data-action', 'view-details');
+    infoZone?.setAttribute('tabindex', '0');
+    infoZone?.setAttribute('role', 'button');
+    infoZone?.setAttribute('aria-label', detailLabel);
+
+    const addButton = card.querySelector('.add-to-bag-btn');
+    if (addButton && !addButton.getAttribute('aria-label')?.includes(productName)) {
+        addButton.setAttribute('aria-label', `Adicionar ${productName} ao carrinho`);
+    }
+}
+
+function openProductDetail(card) {
+    if (!card || !window.LuminaProductDetails?.openProductDetail) return;
+    window.LuminaProductDetails.openProductDetail(card);
+}
+
+function handleProductGridClick(event) {
+    const card = event.target.closest('.product-card');
+    if (!card) return;
+
+    if (event.target.closest('.add-to-bag-btn')) {
+        event.preventDefault();
+        event.stopPropagation();
+        adicionarAoCarrinho(card);
+        mostrarProdutoAdicionado(card);
+        return;
+    }
+
+    if (event.target.closest('.favorite-btn')) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(card);
+        return;
+    }
+
+    if (event.target.closest('[data-action="view-details"]')) {
+        event.preventDefault();
+        openProductDetail(card);
+    }
+}
+
+function handleProductGridKeydown(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    const zone = event.target.closest('[data-action="view-details"]');
+    if (!zone) return;
+
+    const card = zone.closest('.product-card');
+    if (!card) return;
+
+    event.preventDefault();
+    openProductDetail(card);
 }
 
 function getProductData(card) {
@@ -606,39 +717,9 @@ favoritesOnly?.addEventListener('change', event => {
     filtrarProdutos();
 });
 
-productCards.forEach(card => {
-    const addButton = card.querySelector('.add-to-bag-btn');
-    const favoriteButton = card.querySelector('.favorite-btn');
-    const productName = card.dataset.name || card.querySelector('.product-name')?.textContent?.trim() || 'produto';
-
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `Ver detalhes de ${productName}`);
-
-    function openProductDetailFromCard(event) {
-        if (event.target.closest('button, a, input, select, textarea, label')) return;
-        window.LuminaProductDetails?.openProductDetail(card);
-    }
-
-    card.addEventListener('click', openProductDetailFromCard);
-
-    card.addEventListener('keydown', event => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        event.preventDefault();
-        openProductDetailFromCard(event);
-    });
-
-    addButton?.addEventListener('click', event => {
-        event.stopPropagation();
-        adicionarAoCarrinho(card);
-        mostrarProdutoAdicionado(card);
-    });
-
-    favoriteButton?.addEventListener('click', event => {
-        event.stopPropagation();
-        toggleFavorite(card);
-    });
-});
+productCards.forEach(setupProductCard);
+productsGrid?.addEventListener('click', handleProductGridClick);
+productsGrid?.addEventListener('keydown', handleProductGridKeydown);
 
 cartBtn?.addEventListener('click', () => toggleCart(true));
 cartCloseBtn?.addEventListener('click', () => toggleCart(false));
@@ -859,5 +940,7 @@ renderCarrinho();
 filtrarProdutos();
 
 window.LuminaPage = {
-    syncScrollLock: syncPageScrollLock
+    syncScrollLock: syncPageScrollLock,
+    productBadgeLabels,
+    getProductBadgeKey
 };

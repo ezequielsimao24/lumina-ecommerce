@@ -284,32 +284,37 @@ html {
 }
 
 .subtitle {
-    font-size: clamp(10px, 1.2vw, 13px);
-    letter-spacing: 6px;
-    color: #a5b4fc;
-    margin-bottom: 24px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: clamp(10px, 1.15vw, 12px);
+    letter-spacing: 0.38em;
+    color: #c7d2fe;
+    margin-bottom: 20px;
     font-weight: 600;
     text-transform: uppercase;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .title {
-    font-size: clamp(38px, 6.5vw, 80px);
-    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(40px, 6.8vw, 82px);
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.04;
     color: #ffffff;
-    margin-bottom: 24px;
-    letter-spacing: -1px;
+    margin-bottom: 22px;
+    letter-spacing: -0.02em;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    text-wrap: balance;
 }
 
 .description {
-    font-size: clamp(14px, 1.8vw, 19px);
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 40px;
-    max-width: 640px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: clamp(15px, 1.75vw, 18px);
+    color: #e2e8f0;
+    line-height: 1.65;
+    margin-bottom: 36px;
+    max-width: 620px;
     font-weight: 400;
+    text-wrap: pretty;
 }
 
 .hero-buttons {
@@ -899,15 +904,17 @@ html {
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 5;
-    /* Proporção elegante vertical */
     border-radius: 16px;
-    /* Cantos arredondados iguais ao print */
     overflow: hidden;
-    /* Corta o zoom da imagem e o botão que sobe */
     background-color: #f8fafc;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+}
+
+.product-info[data-action="view-details"] {
+    cursor: pointer;
 }
 
 .product-image {
@@ -922,20 +929,57 @@ html {
     position: absolute;
     top: 16px;
     left: 16px;
-    z-index: 5;
+    z-index: 4;
     max-width: calc(100% - 74px);
     border-radius: 999px;
-    background-color: rgba(15, 23, 42, 0.82);
-    color: #ffffff;
     padding: 7px 11px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border: 1px solid transparent;
+}
+
+.badge-premium,
+.badge-alfaiataria {
+    background-color: rgba(15, 23, 42, 0.88);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.badge-novo,
+.badge-bestseller {
+    background-color: rgba(22, 101, 52, 0.9);
+    color: #ecfdf5;
+    border-color: rgba(187, 247, 208, 0.35);
+}
+
+.badge-conforto,
+.badge-eco {
+    background-color: rgba(21, 94, 117, 0.9);
+    color: #ecfeff;
+    border-color: rgba(165, 243, 252, 0.28);
+}
+
+.badge-essencial,
+.badge-pratico,
+.badge-detalhe {
+    background-color: rgba(51, 65, 85, 0.9);
+    color: #f8fafc;
+    border-color: rgba(226, 232, 240, 0.2);
+}
+
+.badge-classico,
+.badge-elegante,
+.badge-couro {
+    background-color: rgba(91, 33, 50, 0.9);
+    color: #fff1f2;
+    border-color: rgba(254, 205, 211, 0.25);
 }
 
 /* Efeito de Zoom ao Passar o Rato */
@@ -991,21 +1035,32 @@ html {
     bottom: 20px;
     left: 50%;
     transform: translate(-50%, 100px);
-    /* Começa escondido lá em baixo */
     width: calc(100% - 40px);
     background-color: #ffffff;
     color: #0f172a;
     border: none;
-    padding: 14px 0;
+    padding: 14px 16px;
     border-radius: 30px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    z-index: 5;
+    z-index: 6;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    /* Transição cirúrgica para subir macio */
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-to-bag-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    display: none;
+}
+
+.add-to-bag-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1898,22 +1953,22 @@ body.no-scroll {
     .subtitle {
         max-width: 100%;
         font-size: 10px;
-        line-height: 1.6;
-        letter-spacing: 3px;
-        margin-bottom: 12px;
+        line-height: 1.55;
+        letter-spacing: 0.28em;
+        margin-bottom: 14px;
         overflow-wrap: anywhere;
     }
 
     .title {
-        font-size: clamp(38px, 13vw, 58px);
-        line-height: 1;
-        margin-bottom: 16px;
-        letter-spacing: 0;
+        font-size: clamp(36px, 11.5vw, 54px);
+        line-height: 1.02;
+        margin-bottom: 14px;
+        letter-spacing: -0.015em;
     }
 
     .description {
         font-size: 14px;
-        line-height: 1.55;
+        line-height: 1.6;
         margin-bottom: 24px;
     }
 
@@ -2040,11 +2095,31 @@ body.no-scroll {
 
     .add-to-bag-btn {
         bottom: 10px;
-        width: calc(100% - 20px);
-        transform: translate(-50%, 0);
-        padding: 10px 8px;
-        font-size: 11px;
-        border-radius: 24px;
+        right: 10px;
+        left: auto;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        padding: 0;
+        transform: none;
+        border-radius: 50%;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    }
+
+    .add-to-bag-icon {
+        display: block;
+    }
+
+    .add-to-bag-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     .favorite-btn {
@@ -2212,8 +2287,10 @@ body.no-scroll {
     }
 
     .add-to-bag-btn {
-        font-size: 12px;
-        padding: 12px 10px;
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        padding: 0;
     }
 
     .product-price {

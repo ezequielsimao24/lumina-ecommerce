@@ -11,6 +11,7 @@
     const detailSizes = document.getElementById('detailSizes');
     const detailColors = document.getElementById('detailColors');
     const detailStock = document.getElementById('detailStock');
+    const detailContent = modal.querySelector('.product-detail-content');
     const addToCartBtn = document.getElementById('detailAddToCart');
     const closeBtn = modal.querySelector('.product-detail-close');
     const secondaryCloseBtn = document.getElementById('detailCloseSecondary');
@@ -27,6 +28,18 @@
         Calcados: 'Calçados & Tênis',
         Acessorios: 'Acessórios'
     };
+
+    function resolveBadge(card, badgeText) {
+        const badgeKey = window.LuminaPage?.getProductBadgeKey?.(card)
+            || card.dataset.badge
+            || card.querySelector('.product-badge')?.dataset.badge
+            || '';
+        const label = window.LuminaPage?.productBadgeLabels?.[badgeKey]
+            || badgeText
+            || 'Lumina';
+
+        return { key: badgeKey, label };
+    }
 
     const colorTokens = {
         Preto: '#111827',
@@ -150,7 +163,7 @@
             price: Number(card.dataset.price || 0),
             stock: Number(card.dataset.stock || 0),
             image: card.querySelector('.product-image')?.getAttribute('src') || '',
-            badge: card.querySelector('.product-badge')?.textContent?.trim() || 'Lumina',
+            badge: resolveBadge(card, card.querySelector('.product-badge')?.textContent?.trim() || ''),
             details: productDetails[id] || {
                 sizes: ['S', 'M', 'L'],
                 colors: ['Preto', 'Branco'],
@@ -162,10 +175,15 @@
     function openProductDetail(card) {
         activeCard = card;
         const product = getCardData(card);
+        const badge = product.badge;
 
         detailImage.src = product.image;
         detailImage.alt = product.name;
-        detailBadge.textContent = product.badge;
+        detailBadge.textContent = badge.label;
+        detailBadge.className = 'product-detail-badge';
+        if (badge.key) {
+            detailBadge.classList.add(`badge-${badge.key}`);
+        }
         detailCategory.textContent = categoryLabels[product.category] || product.category;
         detailTitle.textContent = product.name;
         detailPrice.textContent = formatter.format(product.price);
@@ -174,6 +192,8 @@
 
         renderChoices(detailSizes, product.details.sizes, 'size');
         renderChoices(detailColors, product.details.colors, 'color');
+
+        detailContent?.scrollTo(0, 0);
 
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
